@@ -1,0 +1,399 @@
+﻿<Page x:Class="SysMax2._1.Pages.HelpSupportPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SysMax2._1.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1020"
+      Title="Help &amp; Support">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="20,20,20,10">
+            <StackPanel>
+                <TextBlock Text="Help &amp; Support" FontSize="24" FontWeight="SemiBold" Foreground="White"/>
+                <TextBlock Text="Get assistance with SysMax and learn how to use its features" 
+                           Foreground="#AAAAAA" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="20,0,20,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- FAQs -->
+                <Border Grid.Row="0" Grid.Column="0" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                        CornerRadius="8" Padding="20" Margin="0,0,10,15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Frequently Asked Questions" FontSize="18" FontWeight="SemiBold" 
+                                   Foreground="White" Margin="0,0,0,15"/>
+
+                        <StackPanel Grid.Row="1">
+                            <Expander Header="What is SysMax?" IsExpanded="True" Margin="0,0,0,10"
+                                      Foreground="White" Background="#2a2a2a">
+                                <TextBlock TextWrapping="Wrap" Padding="15" Foreground="#BBBBBB">
+                                    SysMax is a system health monitoring application designed to help you maintain your computer's performance and stability. 
+                                    It provides real-time monitoring of key system metrics, identifies potential issues, and offers solutions to keep your 
+                                    system running optimally.
+                                </TextBlock>
+                            </Expander>
+
+                            <Expander Header="What's the difference between Basic and Pro modes?" Margin="0,0,0,10"
+                                      Foreground="White" Background="#2a2a2a">
+                                <TextBlock TextWrapping="Wrap" Padding="15" Foreground="#BBBBBB">
+                                    Basic mode provides a simplified interface focused on essential system health metrics and common issues. 
+                                    It's designed for everyday users who want an easy-to-understand overview of their system.
+                                    <LineBreak/><LineBreak/>
+                                    Pro mode offers advanced features, detailed analytics, and more in-depth system information for IT professionals
+                                    and advanced users. It includes detailed hardware metrics, system logs, and advanced troubleshooting tools.
+                                </TextBlock>
+                            </Expander>
+
+                            <Expander Header="How does the System Health Score work?" Margin="0,0,0,10"
+                                      Foreground="White" Background="#2a2a2a">
+                                <TextBlock TextWrapping="Wrap" Padding="15" Foreground="#BBBBBB">
+                                    The System Health Score is calculated based on multiple factors including CPU usage, memory usage, 
+                                    disk space, detected issues, and system optimization. A higher score indicates better system health.
+                                    <LineBreak/><LineBreak/>
+                                    - 90-100: Excellent health - system is performing optimally<LineBreak/>
+                                    - 75-89: Good health - minor optimizations possible<LineBreak/>
+                                    - 50-74: Needs attention - issues should be addressed<LineBreak/>
+                                    - Below 50: Poor health - critical issues need immediate attention
+                                </TextBlock>
+                            </Expander>
+
+                            <Expander Header="Can SysMax fix issues automatically?" Margin="0,0,0,10"
+                                      Foreground="White" Background="#2a2a2a">
+                                <TextBlock TextWrapping="Wrap" Padding="15" Foreground="#BBBBBB">
+                                    SysMax identifies issues and provides guided solutions rather than implementing automatic fixes. 
+                                    This approach gives you control over what changes are made to your system while still providing 
+                                    the information and tools you need to resolve problems.
+                                    <LineBreak/><LineBreak/>
+                                    When you click "Fix" for an issue, SysMax will open the appropriate Windows tool or guide you 
+                                    through the steps to resolve the problem.
+                                </TextBlock>
+                            </Expander>
+
+                            <Expander Header="How often should I run a system scan?" Margin="0,0,0,10"
+                                      Foreground="White" Background="#2a2a2a">
+                                <TextBlock TextWrapping="Wrap" Padding="15" Foreground="#BBBBBB">
+                                    We recommend running a complete system scan at least once a week to identify any new issues.
+                                    However, SysMax continuously monitors key system metrics in real-time, so many issues will be
+                                    detected and displayed immediately as they arise.
+                                </TextBlock>
+                            </Expander>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Contact Support -->
+                <Border Grid.Row="0" Grid.Column="1" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                        CornerRadius="8" Padding="20" Margin="10,0,0,15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Contact Support" FontSize="18" FontWeight="SemiBold" 
+                                   Foreground="White" Margin="0,0,0,15"/>
+
+                        <StackPanel Grid.Row="1">
+                            <TextBlock TextWrapping="Wrap" Foreground="#BBBBBB" Margin="0,0,0,15">
+                                If you're experiencing issues that aren't addressed in the FAQ, our support team is here to help.
+                            </TextBlock>
+
+                            <Grid Margin="0,0,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Email:" Foreground="#BBBBBB"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="support@sysmax.com" Foreground="White"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Phone:" Foreground="#BBBBBB" Margin="0,10,0,0"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="1-800-SYSMAX-1" Foreground="White" Margin="0,10,0,0"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Hours:" Foreground="#BBBBBB" Margin="0,10,0,0"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="Monday-Friday, 9am-6pm EST" Foreground="White" Margin="0,10,0,0"/>
+                            </Grid>
+
+                            <Button x:Name="SendFeedbackButton" Content="Send Feedback" Click="SendFeedbackButton_Click"
+                                    Background="#3498db" Foreground="White" BorderThickness="0" 
+                                    Padding="15,8" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Video Tutorials -->
+                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                        CornerRadius="8" Padding="20" Margin="0,0,0,15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Video Tutorials" FontSize="18" FontWeight="SemiBold" 
+                                   Foreground="White" Margin="0,0,0,15"/>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Tutorial 1 -->
+                            <Border Grid.Column="0" Background="#2a2a2a" Margin="0,0,10,0" CornerRadius="6">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Border Grid.Row="0" Background="#1e1e1e" Cursor="Hand" MouseDown="VideoThumbnail_Click">
+                                        <Grid>
+                                            <TextBlock Text="VIDEO THUMBNAIL" Foreground="#444444" 
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Border Width="50" Height="50" CornerRadius="25" Background="#3498db" Opacity="0.8">
+                                                <TextBlock Text="▶" FontSize="20" Foreground="White" 
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+
+                                    <StackPanel Grid.Row="1" Margin="15,10">
+                                        <TextBlock Text="Getting Started with SysMax" FontWeight="SemiBold" Foreground="White"/>
+                                        <TextBlock Text="Learn the basics of SysMax and how to navigate the interface" 
+                                                   Foreground="#AAAAAA" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        <TextBlock Text="3:45" Foreground="#888888" Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Tutorial 2 -->
+                            <Border Grid.Column="1" Background="#2a2a2a" Margin="5,0" CornerRadius="6">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Border Grid.Row="0" Background="#1e1e1e" Cursor="Hand" MouseDown="VideoThumbnail_Click">
+                                        <Grid>
+                                            <TextBlock Text="VIDEO THUMBNAIL" Foreground="#444444" 
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Border Width="50" Height="50" CornerRadius="25" Background="#3498db" Opacity="0.8">
+                                                <TextBlock Text="▶" FontSize="20" Foreground="White" 
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+
+                                    <StackPanel Grid.Row="1" Margin="15,10">
+                                        <TextBlock Text="Resolving Common Issues" FontWeight="SemiBold" Foreground="White"/>
+                                        <TextBlock Text="Learn how to identify and fix common system problems" 
+                                                   Foreground="#AAAAAA" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        <TextBlock Text="5:12" Foreground="#888888" Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <!-- Tutorial 3 -->
+                            <Border Grid.Column="2" Background="#2a2a2a" Margin="10,0,0,0" CornerRadius="6">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Border Grid.Row="0" Background="#1e1e1e" Cursor="Hand" MouseDown="VideoThumbnail_Click">
+                                        <Grid>
+                                            <TextBlock Text="VIDEO THUMBNAIL" Foreground="#444444" 
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Border Width="50" Height="50" CornerRadius="25" Background="#3498db" Opacity="0.8">
+                                                <TextBlock Text="▶" FontSize="20" Foreground="White" 
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+
+                                    <StackPanel Grid.Row="1" Margin="15,10">
+                                        <TextBlock Text="Advanced Features (Pro Mode)" FontWeight="SemiBold" Foreground="White"/>
+                                        <TextBlock Text="Explore the advanced features available in Pro mode" 
+                                                   Foreground="#AAAAAA" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        <TextBlock Text="7:38" Foreground="#888888" Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- User Guide -->
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                        CornerRadius="8" Padding="20" Margin="0,0,0,15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Quick User Guide" FontSize="18" FontWeight="SemiBold" 
+                                   Foreground="White" Margin="0,0,0,15"/>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Left Column -->
+                            <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                                <Border Background="#2a2a2a" CornerRadius="6" Padding="15" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="1" FontSize="24" FontWeight="Bold" Foreground="#3498db" 
+                                                   VerticalAlignment="Top" Margin="0,0,15,0"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="System Overview" FontWeight="SemiBold" Foreground="White"/>
+                                            <TextBlock Text="The main dashboard shows your system health score and key metrics including CPU, memory, and disk usage. Issues that need attention are highlighted here." 
+                                                       Foreground="#BBBBBB" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="#2a2a2a" CornerRadius="6" Padding="15" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="2" FontSize="24" FontWeight="Bold" Foreground="#3498db" 
+                                                   VerticalAlignment="Top" Margin="0,0,15,0"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Detailed Metrics" FontWeight="SemiBold" Foreground="White"/>
+                                            <TextBlock Text="Access detailed information about specific system components such as CPU, memory, storage, and network through the navigation menu." 
+                                                       Foreground="#BBBBBB" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="#2a2a2a" CornerRadius="6" Padding="15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="3" FontSize="24" FontWeight="Bold" Foreground="#3498db" 
+                                                   VerticalAlignment="Top" Margin="0,0,15,0"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Issue Resolution" FontWeight="SemiBold" Foreground="White"/>
+                                            <TextBlock Text="When an issue is detected, click the 'Fix' button to view detailed information about the problem and step-by-step instructions for resolving it." 
+                                                       Foreground="#BBBBBB" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Right Column -->
+                            <StackPanel Grid.Column="1" Margin="15,0,0,0">
+                                <Border Background="#2a2a2a" CornerRadius="6" Padding="15" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="4" FontSize="24" FontWeight="Bold" Foreground="#3498db" 
+                                                   VerticalAlignment="Top" Margin="0,0,15,0"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="System Logs" FontWeight="SemiBold" Foreground="White"/>
+                                            <TextBlock Text="View system event logs and application logs to troubleshoot issues or monitor system activity. Pro mode offers advanced filtering and analysis options." 
+                                                       Foreground="#BBBBBB" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="#2a2a2a" CornerRadius="6" Padding="15" Margin="0,0,0,15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="5" FontSize="24" FontWeight="Bold" Foreground="#3498db" 
+                                                   VerticalAlignment="Top" Margin="0,0,15,0"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Assistant" FontWeight="SemiBold" Foreground="White"/>
+                                            <TextBlock Text="Click the assistant button in the bottom right corner for context-sensitive help and guidance at any time." 
+                                                       Foreground="#BBBBBB" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="#2a2a2a" CornerRadius="6" Padding="15">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="6" FontSize="24" FontWeight="Bold" Foreground="#3498db" 
+                                                   VerticalAlignment="Top" Margin="0,0,15,0"/>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="User Mode" FontWeight="SemiBold" Foreground="White"/>
+                                            <TextBlock Text="Toggle between Basic and Pro modes using the switch in the top right corner. Basic mode is simpler for everyday users, while Pro mode offers advanced features for IT professionals." 
+                                                       Foreground="#BBBBBB" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

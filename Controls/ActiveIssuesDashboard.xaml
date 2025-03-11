@@ -1,0 +1,138 @@
+﻿<UserControl x:Class="SysMax2._1.Controls.ActiveIssuesDashboard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SysMax2._1.Controls"
+             xmlns:converters="clr-namespace:SysMax2._1.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+
+    <UserControl.Resources>
+        <!-- ✅ BooleanToVisibilityConverter -->
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+
+        <!-- ✅ Card Style -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#252525"/>
+            <Setter Property="BorderBrush" Value="#333333"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        <!-- ✅ Card Header Style -->
+        <Style x:Key="CardHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <!-- ✅ Fix Button Style -->
+        <Style x:Key="FixButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3498db"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" 
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2980b9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource CardStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- ✅ Header Section -->
+            <Grid Grid.Row="0">
+                <TextBlock Text="Active Issues" Style="{StaticResource CardHeaderStyle}" Margin="0"/>
+                <TextBlock x:Name="IssueCount" 
+                           Text="{Binding ActiveIssues.Count, StringFormat='{}{0} issues found'}" 
+                           Foreground="#f39c12" 
+                           HorizontalAlignment="Right"/>
+            </Grid>
+
+            <!-- ✅ Issues List -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <ItemsControl ItemsSource="{Binding ActiveIssues}" 
+                                  Visibility="{Binding HasIssues, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#2a2a2a" 
+                                        CornerRadius="4" 
+                                        Padding="12" 
+                                        Margin="0,0,0,10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- ✅ Issue Icon -->
+                                        <TextBlock Grid.Column="0" 
+                                                   Text="{Binding Icon}" 
+                                                   FontSize="20" 
+                                                   Margin="0,0,12,0" 
+                                                   VerticalAlignment="Center"/>
+
+                                        <!-- ✅ Issue Details -->
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding FixActionTag}" 
+                                                       Foreground="White" 
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Text}" 
+                                                       Foreground="#AAAAAA" 
+                                                       FontSize="12" 
+                                                       TextWrapping="Wrap" 
+                                                       Margin="0,5,0,0"/>
+                                        </StackPanel>
+
+                                        <!-- ✅ Fix Button -->
+                                        <Button Grid.Column="2" 
+                                                Content="{Binding FixButtonText}" 
+                                                Style="{StaticResource FixButtonStyle}" 
+                                                Tag="{Binding}" 
+                                                Click="FixIssue_Click"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- ✅ No Issues Message -->
+                    <TextBlock Text="No issues detected. Your system is running optimally." 
+                               Foreground="#2ecc71" 
+                               FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,20" 
+                               Visibility="{Binding HasIssues, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>
