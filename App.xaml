@@ -22,6 +22,13 @@
         <SolidColorBrush x:Key="WarningColor" Color="#f39c12"/>
         <SolidColorBrush x:Key="DangerColor" Color="#e74c3c"/>
         
+        <SolidColorBrush x:Key="PanelBackgroundColor" Color="#252525"/>
+        <SolidColorBrush x:Key="PanelBorderColor" Color="#333333"/>
+        <SolidColorBrush x:Key="ItemBackgroundColor" Color="#2a2a2a"/>
+        <SolidColorBrush x:Key="ButtonBackgroundColor" Color="#2d2d2d"/>
+        <SolidColorBrush x:Key="ProgressBarBackgroundColor" Color="#3a3a3a"/>
+        <SolidColorBrush x:Key="SubtleTextColor" Color="#BBBBBB"/>
+        
         <!--Combobox solution?-->
         <Style x:Key="DarkComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Background" Value="#2d2d2d"/>
@@ -157,6 +164,41 @@
                     </Setter>
                 </Style>
             </Style.Resources>
+        </Style>
+        
+        <!-- Custom ProgressBar Style -->
+        <Style x:Key="ThemedProgressBarStyle" TargetType="ProgressBar">
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="{StaticResource ProgressBarBackgroundColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource SecondaryColor}"/> <!-- Default to green -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid>
+                            <Border Name="PART_Track" CornerRadius="4" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" />
+                            <Border Name="PART_Indicator" CornerRadius="4" 
+                                    Background="{TemplateBinding Foreground}" 
+                                    HorizontalAlignment="Left" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <!-- Change color based on value -->
+                <Trigger Property="Value" Value="75">
+                    <Setter Property="Foreground" Value="{StaticResource WarningColor}"/>
+                </Trigger>
+                <Trigger Property="Value" Value="90">
+                     <Setter Property="Foreground" Value="{StaticResource DangerColor}"/>
+                </Trigger>
+                 <!-- Trigger for values greater than 75 (Warning) -->
+                 <!-- Note: This requires a custom approach or converter as direct > comparison isn't standard -->
+                 <!-- Using simple value triggers for now, can enhance later -->
+            </Style.Triggers>
         </Style>
         
     </Application.Resources>

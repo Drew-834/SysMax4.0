@@ -20,6 +20,7 @@ namespace SysMax2._1.Services
         private static EnhancedHardwareMonitorService? _instance;
         private readonly HardwareMonitorService _baseMonitor;
         private readonly LoggingService _loggingService = LoggingService.Instance;
+        private readonly SettingsService _settingsService = SettingsService.Instance;
         private Timer? _updateTimer;
         private readonly object _lockObj = new object();
         private CancellationTokenSource? _cts;
@@ -280,13 +281,9 @@ namespace SysMax2._1.Services
 
         private EnhancedHardwareMonitorService()
         {
-            // Get the base hardware monitor instance
             _baseMonitor = HardwareMonitorService.Instance;
-
-            // Initialize system data
             InitializeSystemData();
-
-            // Log initialization
+            _settingsService.SettingsSaved += HandleSettingsSaved;
             _loggingService.Log(LogLevel.Info, "Enhanced Hardware Monitor Service initialized");
         }
 
@@ -328,25 +325,26 @@ namespace SysMax2._1.Services
         }
 
         /// <summary>
-        /// Starts real-time monitoring of system hardware
+        /// Starts real-time monitoring of system hardware using the interval defined in settings.
         /// </summary>
-        /// <param name="intervalMilliseconds">Update interval in milliseconds</param>
-        public void StartMonitoring(int intervalMilliseconds = 2000)
+        public void StartMonitoring()
         {
             lock (_lockObj)
             {
                 if (_isMonitoring)
                     return;
 
-                // Create new cancellation token source
                 _cts = new CancellationTokenSource();
 
-                // Create and start update timer
+                // Load current settings to get interval
+                AppSettings settings = _settingsService.LoadSettings();
+                int intervalMilliseconds = settings.UpdateFrequencySeconds * 1000;
+
+                // Create and start update timer with interval from settings
                 _updateTimer = new Timer(UpdateCallback, null, 0, intervalMilliseconds);
 
                 _isMonitoring = true;
-
-                _loggingService.Log(LogLevel.Info, $"Started hardware monitoring with {intervalMilliseconds}ms interval");
+                _loggingService.Log(LogLevel.Info, $"Started hardware monitoring with {intervalMilliseconds}ms interval from settings");
             }
         }
 
@@ -360,19 +358,43 @@ namespace SysMax2._1.Services
                 if (!_isMonitoring)
                     return;
 
-                // Stop the timer
                 _updateTimer?.Change(Timeout.Infinite, Timeout.Infinite);
                 _updateTimer?.Dispose();
                 _updateTimer = null;
 
-                // Cancel any pending operations
                 _cts?.Cancel();
                 _cts?.Dispose();
                 _cts = null;
 
                 _isMonitoring = false;
-
                 _loggingService.Log(LogLevel.Info, "Stopped hardware monitoring");
+            }
+        }
+
+        private void HandleSettingsSaved(object? sender, EventArgs e)
+        {
+            lock (_lockObj)
+            {
+                if (!_isMonitoring || _updateTimer == null)
+                    return;
+
+                AppSettings newSettings = _settingsService.LoadSettings();
+                int newIntervalMilliseconds = newSettings.UpdateFrequencySeconds * 1000;
+
+                // Update alert thresholds immediately
+                HighCpuThreshold = newSettings.CpuAlertThreshold;
+                HighMemoryThreshold = newSettings.MemoryAlertThreshold;
+                HighDiskUsageThreshold = newSettings.DiskAlertThreshold;
+                // Add other thresholds if needed (e.g., temperature, low disk space)
+
+                // Check if the timer interval needs updating
+                if (_updateTimer != null)
+                {
+                    // Get the current interval (requires reflection or storing it separately)
+                    // For simplicity, let's just restart the timer with the new interval
+                    _updateTimer.Change(0, newIntervalMilliseconds);
+                    _loggingService.Log(LogLevel.Info, $"Updated hardware monitoring interval to {newIntervalMilliseconds}ms due to settings change");
+                }
             }
         }
 
@@ -527,22 +549,53 @@ namespace SysMax2._1.Services
                     // Fallback to performance counter
                     using (var memCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use", true))
                     {
+                        // Prime the counter
+                        memCounter.NextValue();
+                        Thread.Sleep(100); // Give it a moment
+                        // Get the actual value
                         MemoryUsage = memCounter.NextValue();
                     }
                 }
 
                 // Update available memory
                 long availableMemBytes = 0;
-                using (var searcher = new ManagementObjectSearcher("SELECT FreePhysicalMemory FROM Win32_OperatingSystem"))
+                try
                 {
-                    foreach (var obj in searcher.Get())
+                     using (var searcher = new ManagementObjectSearcher("SELECT FreePhysicalMemory FROM Win32_OperatingSystem"))
+                     {
+                         foreach (var obj in searcher.Get())
+                         {
+                             // FreePhysicalMemory is in KB
+                             availableMemBytes = Convert.ToInt64(obj["FreePhysicalMemory"]) * 1024;
+                             break;
+                         }
+                     }
+                }
+                catch (Exception wmiEx)
+                {
+                    _loggingService.Log(LogLevel.Warning, $"WMI query for FreePhysicalMemory failed: {wmiEx.Message}. Trying LibreHardwareMonitor fallback.");
+                    // Fallback to LibreHardwareMonitor data if WMI fails
+                    if (memoryInfo.TryGetValue("Available", out string? availStr))
                     {
-                        // FreePhysicalMemory is in KB
-                        availableMemBytes = Convert.ToInt64(obj["FreePhysicalMemory"]) * 1024;
-                        break;
+                        // Assuming Available memory is reported in MB by LibreHardwareMonitor
+                        if (float.TryParse(availStr.Replace(" MB", ""), out float availMB))
+                        {
+                            availableMemBytes = (long)(availMB * 1024 * 1024);
+                        }
                     }
                 }
-                AvailableMemory = availableMemBytes;
+                
+                // Only update if a valid value was obtained
+                if (availableMemBytes > 0)
+                {
+                    AvailableMemory = availableMemBytes;
+                }
+                else
+                {
+                    _loggingService.Log(LogLevel.Warning, "Could not determine available memory.");
+                     // Keep the last known value or set to 0 if never determined?
+                     // For now, let's keep the last value by not updating AvailableMemory property if fetch fails.
+                }
 
                 // Update total memory
                 if (TotalMemory == 0)
@@ -885,16 +938,11 @@ namespace SysMax2._1.Services
         /// </summary>
         public void Dispose()
         {
-            // Stop monitoring
+            // Unsubscribe from settings changes
+            _settingsService.SettingsSaved -= HandleSettingsSaved;
             StopMonitoring();
-
-            // Dispose timer
-            _updateTimer?.Dispose();
-
-            // Dispose cancellation token source
-            _cts?.Dispose();
-
             _loggingService.Log(LogLevel.Info, "Enhanced Hardware Monitor Service disposed");
+            GC.SuppressFinalize(this);
         }
     }
 }

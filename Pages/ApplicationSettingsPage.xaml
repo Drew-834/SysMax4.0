@@ -22,13 +22,13 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0">
-                <TextBlock Text="Application Settings" FontSize="24" FontWeight="SemiBold" Foreground="White"/>
+                <TextBlock Text="Application Settings" FontSize="24" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
                 <TextBlock Text="Configure SysMax to suit your preferences" 
-                           Foreground="#AAAAAA" Margin="0,5,0,0"/>
+                           Foreground="{StaticResource MutedTextColor}" Margin="0,5,0,0"/>
             </StackPanel>
 
             <Button x:Name="SaveSettingsButton" Grid.Column="1" Content="Save Settings" Click="SaveSettingsButton_Click"
-                    Background="#3498db" Foreground="White" BorderThickness="0" 
+                    Background="{StaticResource PrimaryColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
                     Padding="15,8"/>
         </Grid>
 
@@ -47,7 +47,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- General Settings -->
-                <Border Grid.Row="0" Grid.Column="0" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="0,0,10,15">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -56,7 +56,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="General Settings" FontSize="18" FontWeight="SemiBold" 
-                                   Foreground="White" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
 
                         <StackPanel Grid.Row="1">
                             <!-- Start with Windows -->
@@ -67,9 +67,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Start with Windows" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Start with Windows" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Automatically start SysMax when Windows starts" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <CheckBox x:Name="StartWithWindowsCheckbox" Grid.Column="1" VerticalAlignment="Center"
@@ -84,9 +84,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Run in Background" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Run in Background" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Keep SysMax running in the background when closed" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <CheckBox x:Name="RunInBackgroundCheckbox" Grid.Column="1" VerticalAlignment="Center"
@@ -101,9 +101,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Default User Mode" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Default User Mode" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Choose the default mode when SysMax starts" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <ComboBox x:Name="DefaultUserModeComboBox" Grid.Column="1" Width="120"
@@ -121,9 +121,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Language" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Language" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Select the application display language" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <ComboBox x:Name="LanguageComboBox" Grid.Column="1" Width="120"
@@ -144,9 +144,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Theme" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Theme" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Choose the application theme" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <ComboBox x:Name="ThemeComboBox" Grid.Column="1" Width="120"
@@ -161,7 +161,7 @@
                 </Border>
 
                 <!-- Notification Settings -->
-                <Border Grid.Row="0" Grid.Column="1" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="0" Grid.Column="1" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="10,0,0,15">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -170,7 +170,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="Notifications" FontSize="18" FontWeight="SemiBold" 
-                                   Foreground="White" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
 
                         <StackPanel Grid.Row="1">
                             <!-- Enable Notifications -->
@@ -181,9 +181,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Enable Notifications" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Enable Notifications" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Show notifications for system events and issues" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <CheckBox x:Name="EnableNotificationsCheckbox" Grid.Column="1" VerticalAlignment="Center"
@@ -198,9 +198,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Critical Issues Only" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Critical Issues Only" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Only notify for critical issues" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <CheckBox x:Name="CriticalIssuesOnlyCheckbox" Grid.Column="1" VerticalAlignment="Center"
@@ -215,9 +215,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Notification Sound" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Notification Sound" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Play sound with notifications" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <CheckBox x:Name="NotificationSoundCheckbox" Grid.Column="1" VerticalAlignment="Center"
@@ -228,7 +228,7 @@
                 </Border>
 
                 <!-- Monitoring Settings -->
-                <Border Grid.Row="1" Grid.Column="0" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="0,0,10,15">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -237,7 +237,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="Monitoring Settings" FontSize="18" FontWeight="SemiBold" 
-                                   Foreground="White" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
 
                         <StackPanel Grid.Row="1">
                             <!-- Update Frequency -->
@@ -248,9 +248,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Update Frequency" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Update Frequency" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="How often to update system metrics" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <ComboBox x:Name="UpdateFrequencyComboBox" Grid.Column="1" Width="120"
@@ -270,16 +270,16 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="CPU Alert Threshold" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="CPU Alert Threshold" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Alert when CPU usage exceeds this percentage" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Slider x:Name="CpuThresholdSlider" Width="100" Minimum="50" Maximum="100" 
                                             Value="80" TickFrequency="5" IsSnapToTickEnabled="True"
                                             VerticalAlignment="Center" ValueChanged="ThresholdSlider_ValueChanged"/>
-                                    <TextBlock x:Name="CpuThresholdText" Text="80%" Foreground="White" 
+                                    <TextBlock x:Name="CpuThresholdText" Text="80%" Foreground="{StaticResource LightTextColor}" 
                                                VerticalAlignment="Center" Margin="10,0,0,0" Width="40"/>
                                 </StackPanel>
                             </Grid>
@@ -292,16 +292,16 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Memory Alert Threshold" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Memory Alert Threshold" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Alert when memory usage exceeds this percentage" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Slider x:Name="MemoryThresholdSlider" Width="100" Minimum="50" Maximum="100" 
                                             Value="85" TickFrequency="5" IsSnapToTickEnabled="True"
                                             VerticalAlignment="Center" ValueChanged="ThresholdSlider_ValueChanged"/>
-                                    <TextBlock x:Name="MemoryThresholdText" Text="85%" Foreground="White" 
+                                    <TextBlock x:Name="MemoryThresholdText" Text="85%" Foreground="{StaticResource LightTextColor}" 
                                                VerticalAlignment="Center" Margin="10,0,0,0" Width="40"/>
                                 </StackPanel>
                             </Grid>
@@ -314,16 +314,16 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Disk Alert Threshold" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Disk Alert Threshold" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Alert when disk usage exceeds this percentage" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Slider x:Name="DiskThresholdSlider" Width="100" Minimum="50" Maximum="100" 
                                             Value="90" TickFrequency="5" IsSnapToTickEnabled="True"
                                             VerticalAlignment="Center" ValueChanged="ThresholdSlider_ValueChanged"/>
-                                    <TextBlock x:Name="DiskThresholdText" Text="90%" Foreground="White" 
+                                    <TextBlock x:Name="DiskThresholdText" Text="90%" Foreground="{StaticResource LightTextColor}" 
                                                VerticalAlignment="Center" Margin="10,0,0,0" Width="40"/>
                                 </StackPanel>
                             </Grid>
@@ -332,7 +332,7 @@
                 </Border>
 
                 <!-- Advanced Settings -->
-                <Border Grid.Row="1" Grid.Column="1" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="10,0,0,15">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -341,7 +341,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="Advanced Settings" FontSize="18" FontWeight="SemiBold" 
-                                   Foreground="White" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
 
                         <StackPanel Grid.Row="1">
                             <!-- Enable Logging -->
@@ -352,9 +352,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Enable Logging" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Enable Logging" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Write application logs to disk" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <CheckBox x:Name="EnableLoggingCheckbox" Grid.Column="1" VerticalAlignment="Center"
@@ -369,9 +369,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Automatic Updates" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Automatic Updates" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Check for and install updates automatically" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <CheckBox x:Name="AutoUpdateCheckbox" Grid.Column="1" VerticalAlignment="Center"
@@ -386,13 +386,13 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Clear Application Data" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Clear Application Data" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Reset all settings and clear stored data" 
-                                               Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                               Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                 </StackPanel>
 
                                 <Button x:Name="ClearDataButton" Grid.Column="1" Content="Clear Data" Click="ClearDataButton_Click"
-                                        Background="#e74c3c" Foreground="White" BorderThickness="0" 
+                                        Background="{StaticResource DangerColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
                                         Padding="8,4"/>
                             </Grid>
                         </StackPanel>
@@ -400,7 +400,7 @@
                 </Border>
 
                 <!-- About SysMax -->
-                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="0,0,0,15">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -409,21 +409,21 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="SysMax" FontSize="24" FontWeight="Bold" Foreground="#3498db"/>
+                        <TextBlock Grid.Column="0" Text="SysMax" FontSize="24" FontWeight="Bold" Foreground="{StaticResource PrimaryColor}"/>
 
                         <StackPanel Grid.Column="1" Margin="15,0">
-                            <TextBlock Text="System Health Monitor" FontSize="16" Foreground="White"/>
-                            <TextBlock Text="Version 2.1.0" Foreground="#BBBBBB" Margin="0,5,0,0"/>
-                            <TextBlock x:Name="CopyrightText" Text="© 2025 SysMax Inc. All rights reserved." Foreground="#AAAAAA" Margin="0,5,0,0"/>
+                            <TextBlock Text="System Health Monitor" FontSize="16" Foreground="{StaticResource LightTextColor}"/>
+                            <TextBlock Text="Version 2.1.0" Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="CopyrightText" Text="© 2025 SysMax Inc. All rights reserved." Foreground="{StaticResource MutedTextColor}" Margin="0,5,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
                             <Button x:Name="CheckUpdatesButton" Content="Check for Updates" Click="CheckUpdatesButton_Click"
-                                    Background="#2d2d2d" Foreground="White" BorderThickness="0" 
+                                    Background="{StaticResource ButtonBackgroundColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
                                     Padding="10,5" Margin="0,0,10,0"/>
 
                             <Button x:Name="AboutButton" Content="About" Click="AboutButton_Click"
-                                    Background="#2d2d2d" Foreground="White" BorderThickness="0" 
+                                    Background="{StaticResource ButtonBackgroundColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
                                     Padding="10,5"/>
                         </StackPanel>
                     </Grid>

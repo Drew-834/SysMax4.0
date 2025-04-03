@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using System.Windows.Navigation;
 using System.Diagnostics;
 using SysMax2._1.Models;
+using SysMax2._1.Services;
+using System.IO;
+using System.Text.Json;
 
 namespace SysMax2._1.Pages
 {
@@ -13,179 +14,47 @@ namespace SysMax2._1.Pages
     /// </summary>
     public partial class ApplicationSettingsPage : Page
     {
-        private MainWindow mainWindow;
-        private CheckBox StartWithWindowsCheck;
-        private CheckBox AutoUpdateCheck;
-        private RadioButton RefreshMediumOption;
-        private RadioButton RefreshSlowOption;
-        private RadioButton RefreshFastOption;
-        private CheckBox UseAnimationsCheck;
-        private CheckBox SystemAlertsCheck;
-        private CheckBox PerformanceWarningsCheck;
-        private CheckBox UpdatesNotificationsCheck;
-        private CheckBox UsageDataCheck;
-        private CheckBox CrashReportsCheck;
-        // The following sliders are defined in XAML so the duplicate declarations are commented out.
-        //private Slider CpuThresholdSlider;
-        //private Slider MemoryThresholdSlider;
-        //private Slider DiskThresholdSlider;
-        private Slider DiskSpaceThresholdSlider;
+        private MainWindow? mainWindow;
+        private readonly SettingsService _settingsService;
+        private AppSettings _currentSettings; // Initialized in constructor
 
         public ApplicationSettingsPage()
         {
             InitializeComponent();
 
-            // Initialize missing controls
-            InitializeMissingControls();
+            // Use the singleton instance and load settings immediately
+            _settingsService = SettingsService.Instance;
+            _currentSettings = _settingsService.LoadSettings(); // Initialize _currentSettings here
 
             // Get reference to main window for assistant interactions
             mainWindow = Window.GetWindow(this) as MainWindow;
 
-            // Load settings (in a real app, these would be loaded from storage)
-            LoadSettings();
-        }
-
-        private void InitializeMissingControls()
-        {
-            // Create controls if they don't exist
-            if (StartWithWindowsCheck == null)
-            {
-                StartWithWindowsCheck = new CheckBox();
-                StartWithWindowsCheck.Content = "Start with Windows";
-                StartWithWindowsCheck.IsChecked = true;
-            }
-
-            if (AutoUpdateCheck == null)
-            {
-                AutoUpdateCheck = new CheckBox();
-                AutoUpdateCheck.Content = "Automatic Updates";
-                AutoUpdateCheck.IsChecked = true;
-            }
-
-            if (RefreshMediumOption == null)
-            {
-                RefreshMediumOption = new RadioButton();
-                RefreshMediumOption.Content = "Medium";
-                RefreshMediumOption.IsChecked = true;
-            }
-
-            if (RefreshSlowOption == null)
-            {
-                RefreshSlowOption = new RadioButton();
-                RefreshSlowOption.Content = "Slow";
-            }
-
-            if (RefreshFastOption == null)
-            {
-                RefreshFastOption = new RadioButton();
-                RefreshFastOption.Content = "Fast";
-            }
-
-            if (UseAnimationsCheck == null)
-            {
-                UseAnimationsCheck = new CheckBox();
-                UseAnimationsCheck.Content = "Use Animations";
-                UseAnimationsCheck.IsChecked = true;
-            }
-
-            if (SystemAlertsCheck == null)
-            {
-                SystemAlertsCheck = new CheckBox();
-                SystemAlertsCheck.Content = "System Alerts";
-                SystemAlertsCheck.IsChecked = true;
-            }
-
-            if (PerformanceWarningsCheck == null)
-            {
-                PerformanceWarningsCheck = new CheckBox();
-                PerformanceWarningsCheck.Content = "Performance Warnings";
-                PerformanceWarningsCheck.IsChecked = true;
-            }
-
-            if (UpdatesNotificationsCheck == null)
-            {
-                UpdatesNotificationsCheck = new CheckBox();
-                UpdatesNotificationsCheck.Content = "Update Notifications";
-                UpdatesNotificationsCheck.IsChecked = true;
-            }
-
-            if (UsageDataCheck == null)
-            {
-                UsageDataCheck = new CheckBox();
-                UsageDataCheck.Content = "Send Usage Data";
-                UsageDataCheck.IsChecked = true;
-            }
-
-            if (CrashReportsCheck == null)
-            {
-                CrashReportsCheck = new CheckBox();
-                CrashReportsCheck.Content = "Send Crash Reports";
-                CrashReportsCheck.IsChecked = true;
-            }
-
-            // These sliders are defined in XAML. In case they aren't, create them.
-            if (CpuThresholdSlider == null)
-            {
-                CpuThresholdSlider = new Slider();
-                CpuThresholdSlider.Minimum = 50;
-                CpuThresholdSlider.Maximum = 100;
-                CpuThresholdSlider.Value = 80;
-            }
-
-            if (MemoryThresholdSlider == null)
-            {
-                MemoryThresholdSlider = new Slider();
-                MemoryThresholdSlider.Minimum = 50;
-                MemoryThresholdSlider.Maximum = 100;
-                MemoryThresholdSlider.Value = 85;
-            }
-
-            if (DiskThresholdSlider == null)
-            {
-                DiskThresholdSlider = new Slider();
-                DiskThresholdSlider.Minimum = 50;
-                DiskThresholdSlider.Maximum = 100;
-                DiskThresholdSlider.Value = 90;
-            }
-
-            if (DiskSpaceThresholdSlider == null)
-            {
-                DiskSpaceThresholdSlider = new Slider();
-                DiskSpaceThresholdSlider.Minimum = 5;
-                DiskSpaceThresholdSlider.Maximum = 50;
-                DiskSpaceThresholdSlider.Value = 15;
-            }
-
-            // Add controls to the page if needed
-            // This would typically be done in XAML.
+            // Apply loaded settings to the UI
+            ApplySettingsToUI();
         }
 
         private void ThresholdSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (sender is Slider slider)
             {
-                if (slider == CpuThresholdSlider && CpuThresholdText != null)
+                // Use slider's Name property to identify which slider changed
+                if (slider.Name == "CpuThresholdSlider" && CpuThresholdText != null)
                 {
                     CpuThresholdText.Text = $"{(int)slider.Value}%";
                 }
-                else if (slider == MemoryThresholdSlider && MemoryThresholdText != null)
+                else if (slider.Name == "MemoryThresholdSlider" && MemoryThresholdText != null)
                 {
                     MemoryThresholdText.Text = $"{(int)slider.Value}%";
                 }
-                else if (slider == DiskThresholdSlider && DiskThresholdText != null)
+                else if (slider.Name == "DiskThresholdSlider" && DiskThresholdText != null)
                 {
                     DiskThresholdText.Text = $"{(int)slider.Value}%";
-                }
-                else if (slider == DiskSpaceThresholdSlider)
-                {
-                    // Handle disk space threshold if needed
                 }
             }
         }
 
         private void ClearDataButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement clear data functionality
             var result = MessageBox.Show(
                 "This will reset all settings to default and clear stored application data. Are you sure you want to continue?",
                 "Clear Application Data",
@@ -194,81 +63,161 @@ namespace SysMax2._1.Pages
 
             if (result == MessageBoxResult.Yes)
             {
-                // Reset settings to default
-                LoadSettings();
-
-                // Show confirmation
-                MessageBox.Show(
-                    "Application data has been cleared and settings reset to default.",
-                    "Data Cleared",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
-                // Update status
-                if (mainWindow != null)
+                try
                 {
-                    mainWindow.UpdateStatus("Application data cleared");
-                    mainWindow.ShowAssistantMessage("I've reset all settings to their default values and cleared any stored application data.");
+                    _settingsService.ResetToDefaults();
+
+                    // Reload settings and apply to UI
+                    _currentSettings = _settingsService.LoadSettings();
+                    ApplySettingsToUI();
+
+                    MessageBox.Show(
+                        "Application data has been cleared and settings reset to default.",
+                        "Data Cleared",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    if (mainWindow != null)
+                    {
+                        mainWindow.UpdateStatus("Application data cleared and settings reset");
+                        mainWindow.ShowAssistantMessage("I've reset all settings to their default values and cleared the settings file.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                     MessageBox.Show($"Error clearing data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                     if (mainWindow != null)
+                     {
+                         mainWindow.UpdateStatus("Error clearing application data");
+                         mainWindow.ShowAssistantMessage($"I encountered an error trying to clear the application data: {ex.Message}");
+                     }
                 }
             }
         }
 
         private void CheckUpdatesButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement check for updates
+            MessageBox.Show("Update checking functionality is not implemented yet.", "Not Implemented", MessageBoxButton.OK, MessageBoxImage.Information);
+            // Keep assistant message for now
             if (mainWindow != null)
             {
-                mainWindow.UpdateStatus("Checking for updates...");
-                mainWindow.ShowAssistantMessage("I'm checking if there are any updates available for SysMax...");
+                mainWindow.UpdateStatus("Update check not implemented");
+                mainWindow.ShowAssistantMessage("Checking for updates isn't implemented in this version yet.");
             }
-
-            // Simulate update check with a delay
-            var timer = new System.Windows.Threading.DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(2)
-            };
-
-            timer.Tick += (s, args) =>
-            {
-                timer.Stop();
-                MessageBox.Show(
-                    "You are running the latest version of SysMax.",
-                    "No Updates Available",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
-                if (mainWindow != null)
-                {
-                    mainWindow.UpdateStatus("No updates available");
-                    mainWindow.ShowAssistantMessage("Good news! You're already running the latest version of SysMax.");
-                }
-            };
-
-            timer.Start();
         }
 
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
-            // Show about dialog
+            // TODO: Get version dynamically from assembly info
+            string version = "2.1.0"; // Hardcoded for now
             MessageBox.Show(
-                "SysMax System Health Monitor\nVersion 2.1.0\n\nA comprehensive system monitoring and optimization tool.\n\n© 2025 SysMax Inc. All rights reserved.",
+                $"SysMax System Health Monitor\nVersion {version}\n\nA comprehensive system monitoring and optimization tool.\n\n© 2025 SysMax Inc. All rights reserved.",
                 "About SysMax",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
 
-        // Added missing method to load settings
-        private void LoadSettings()
+        private void ApplySettingsToUI()
         {
-            // TODO: Implement settings loading logic.
-            // For now, this is a stub.
+            // _currentSettings is already loaded
+
+            // Apply settings to UI elements
+            try
+            {
+                // General
+                StartWithWindowsCheckbox.IsChecked = _currentSettings.StartWithWindows;
+                RunInBackgroundCheckbox.IsChecked = _currentSettings.RunInBackground;
+                DefaultUserModeComboBox.SelectedIndex = _currentSettings.GetUserModeIndex();
+                LanguageComboBox.SelectedIndex = 0; // Hardcoded to English for now
+                ThemeComboBox.SelectedIndex = _currentSettings.GetThemeIndex(); // Needs theme switching logic
+
+                // Notifications
+                EnableNotificationsCheckbox.IsChecked = _currentSettings.EnableNotifications;
+                CriticalIssuesOnlyCheckbox.IsChecked = _currentSettings.CriticalIssuesOnly;
+                NotificationSoundCheckbox.IsChecked = _currentSettings.NotificationSound;
+
+                // Monitoring
+                UpdateFrequencyComboBox.SelectedIndex = _currentSettings.GetUpdateFrequencyIndex();
+                CpuThresholdSlider.Value = _currentSettings.CpuAlertThreshold;
+                MemoryThresholdSlider.Value = _currentSettings.MemoryAlertThreshold;
+                DiskThresholdSlider.Value = _currentSettings.DiskAlertThreshold;
+                // Manually update TextBlocks after setting Slider values
+                CpuThresholdText.Text = $"{_currentSettings.CpuAlertThreshold}%";
+                MemoryThresholdText.Text = $"{_currentSettings.MemoryAlertThreshold}%";
+                DiskThresholdText.Text = $"{_currentSettings.DiskAlertThreshold}%";
+
+                // Advanced
+                EnableLoggingCheckbox.IsChecked = _currentSettings.EnableLogging;
+                AutoUpdateCheckbox.IsChecked = _currentSettings.AutoUpdateCheck; // Placeholder
+            }
+            catch (Exception ex)
+            {
+                // Log error or show message if UI update fails
+                MessageBox.Show($"Error applying settings to UI: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                 if (mainWindow != null) mainWindow.UpdateStatus("Error loading settings UI");
+            }
         }
 
-        // Added missing event handler for SaveSettingsButton
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement settings saving logic.
-            // For now, this is a stub.
+            // Create AppSettings object from UI
+            var settingsToSave = new AppSettings
+            {
+                // General
+                StartWithWindows = StartWithWindowsCheckbox.IsChecked ?? false,
+                RunInBackground = RunInBackgroundCheckbox.IsChecked ?? false,
+                // DefaultUserMode = ((ComboBoxItem)DefaultUserModeComboBox.SelectedItem).Content.ToString(), // Correct way to get selected string
+                // Language = ((ComboBoxItem)LanguageComboBox.SelectedItem).Content.ToString(), // Correct way
+                // Theme = ((ComboBoxItem)ThemeComboBox.SelectedItem).Content.ToString(), // Correct way
+
+                // Notifications
+                EnableNotifications = EnableNotificationsCheckbox.IsChecked ?? false,
+                CriticalIssuesOnly = CriticalIssuesOnlyCheckbox.IsChecked ?? false,
+                NotificationSound = NotificationSoundCheckbox.IsChecked ?? false,
+
+                // Monitoring
+                // UpdateFrequencySeconds = GetFrequencyFromIndex(UpdateFrequencyComboBox.SelectedIndex),
+                CpuAlertThreshold = (int)CpuThresholdSlider.Value,
+                MemoryAlertThreshold = (int)MemoryThresholdSlider.Value,
+                DiskAlertThreshold = (int)DiskThresholdSlider.Value,
+
+                // Advanced
+                EnableLogging = EnableLoggingCheckbox.IsChecked ?? false,
+                AutoUpdateCheck = AutoUpdateCheckbox.IsChecked ?? false
+            };
+            
+            // Use helper methods to set string/int values from ComboBox indices
+            settingsToSave.SetUserModeFromIndex(DefaultUserModeComboBox.SelectedIndex);
+            // settingsToSave.SetLanguageFromIndex(LanguageComboBox.SelectedIndex); // Need mapping if implemented
+            settingsToSave.SetThemeFromIndex(ThemeComboBox.SelectedIndex);
+            settingsToSave.SetUpdateFrequencyFromIndex(UpdateFrequencyComboBox.SelectedIndex);
+
+
+            // Save using the service
+            try
+            {
+                _settingsService.SaveSettings(settingsToSave);
+                _currentSettings = settingsToSave; // Update the in-memory settings
+
+                MessageBox.Show("Settings saved successfully.", "Settings Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                if (mainWindow != null)
+                {
+                    mainWindow.UpdateStatus("Settings saved");
+                    mainWindow.ShowAssistantMessage("Your application settings have been saved.");
+                }
+
+                // TODO: Apply settings that require immediate action (e.g., theme change, update frequency change)
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving settings: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (mainWindow != null)
+                {
+                    mainWindow.UpdateStatus("Error saving settings");
+                    mainWindow.ShowAssistantMessage($"I encountered an error trying to save your settings: {ex.Message}");
+                }
+            }
         }
     }
 }

@@ -12,8 +12,8 @@
         <local:NumericStringConverter x:Key="NumericStringConverter" />
 
         <Style x:Key="CardStyle" TargetType="Border">
-            <Setter Property="Background" Value="#252525"/>
-            <Setter Property="BorderBrush" Value="#333333"/>
+            <Setter Property="Background" Value="{StaticResource PanelBackgroundColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PanelBorderColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="Padding" Value="15"/>
@@ -22,13 +22,13 @@
 
         <Style x:Key="CardHeaderStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource LightTextColor}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Margin" Value="0,0,0,15"/>
         </Style>
 
         <Style x:Key="MetricCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="#2a2a2a"/>
+            <Setter Property="Background" Value="{StaticResource ItemBackgroundColor}"/>
             <Setter Property="CornerRadius" Value="6"/>
             <Setter Property="Padding" Value="15"/>
             <Setter Property="Margin" Value="5"/>
@@ -62,15 +62,15 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock Text="CPU" FontWeight="SemiBold" Foreground="#BBBBBB"/>
-                            <Ellipse x:Name="CpuHealthIndicator" Width="10" Height="10" Fill="#2ecc71" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="CPU" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}"/>
+                            <Ellipse x:Name="CpuHealthIndicator" Width="10" Height="10" Fill="{StaticResource SecondaryColor}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,5">
                             <TextBlock x:Name="CpuUsageValue" 
                                        Text="{Binding CpuUsage, Converter={StaticResource NumericStringConverter}, ConverterParameter=OneDecimal}" 
-                                       FontSize="28" FontWeight="Bold" Foreground="White"/>
-                            <TextBlock Text="%" FontSize="16" Foreground="White" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                                       FontSize="28" FontWeight="Bold" Foreground="{StaticResource LightTextColor}"/>
+                            <TextBlock Text="%" FontSize="16" Foreground="{StaticResource LightTextColor}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -85,18 +85,18 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock Text="Memory" FontWeight="SemiBold" Foreground="#BBBBBB"/>
-                            <Ellipse x:Name="MemoryHealthIndicator" Width="10" Height="10" Fill="#2ecc71" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Memory" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}"/>
+                            <Ellipse x:Name="MemoryHealthIndicator" Width="10" Height="10" Fill="{StaticResource SecondaryColor}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,5">
                             <TextBlock x:Name="MemoryUsageValue" 
                                        Text="{Binding MemoryUsage, Converter={StaticResource NumericStringConverter}, ConverterParameter=OneDecimal}" 
-                                       FontSize="28" FontWeight="Bold" Foreground="White"/>
-                            <TextBlock Text="%" FontSize="16" Foreground="White" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                                       FontSize="28" FontWeight="Bold" Foreground="{StaticResource LightTextColor}"/>
+                            <TextBlock Text="%" FontSize="16" Foreground="{StaticResource LightTextColor}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
                         </StackPanel>
 
-                        <TextBlock x:Name="MemoryAvailable" Grid.Row="2" Text="{Binding AvailableMemoryDisplay}" Foreground="#AAAAAA" FontSize="12"/>
+                        <TextBlock x:Name="MemoryAvailable" Grid.Row="2" Text="{Binding AvailableMemoryDisplay}" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
                     </Grid>
                 </Border>
 
@@ -110,18 +110,18 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock Text="Storage" FontWeight="SemiBold" Foreground="#BBBBBB"/>
-                            <Ellipse x:Name="DiskHealthIndicator" Width="10" Height="10" Fill="#f39c12" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Storage" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}"/>
+                            <Ellipse x:Name="DiskHealthIndicator" Width="10" Height="10" Fill="{StaticResource SecondaryColor}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,5">
                             <TextBlock x:Name="DiskUsageValue" 
                                        Text="{Binding DiskUsage, Converter={StaticResource NumericStringConverter}, ConverterParameter=OneDecimal}" 
-                                       FontSize="28" FontWeight="Bold" Foreground="White"/>
-                            <TextBlock Text="%" FontSize="16" Foreground="White" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                                       FontSize="28" FontWeight="Bold" Foreground="{StaticResource LightTextColor}"/>
+                            <TextBlock Text="%" FontSize="16" Foreground="{StaticResource LightTextColor}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
                         </StackPanel>
 
-                        <TextBlock x:Name="DiskAvailable" Grid.Row="2" Text="{Binding AvailableDiskSpaceDisplay}" Foreground="#AAAAAA" FontSize="12"/>
+                        <TextBlock x:Name="DiskAvailable" Grid.Row="2" Text="{Binding AvailableDiskSpaceDisplay}" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
                     </Grid>
                 </Border>
 
@@ -135,14 +135,14 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock Text="Network" FontWeight="SemiBold" Foreground="#BBBBBB"/>
-                            <Ellipse x:Name="NetworkHealthIndicator" Width="10" Height="10" Fill="#2ecc71" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Network" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}"/>
+                            <Ellipse x:Name="NetworkHealthIndicator" Width="10" Height="10" Fill="{StaticResource SecondaryColor}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,5,0,5">
                             <TextBlock x:Name="NetworkSpeedValue" 
                                        Text="{Binding NetworkDisplayString}" 
-                                       FontSize="18" FontWeight="Bold" Foreground="White" TextWrapping="Wrap"/>
+                                       FontSize="18" FontWeight="Bold" Foreground="{StaticResource LightTextColor}" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Grid>
                 </Border>

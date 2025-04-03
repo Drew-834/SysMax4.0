@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 using SysMax2._1.Models;
 using SysMax2._1.Services;
 
@@ -18,7 +17,6 @@ namespace SysMax2._1.Controls
     {
         private readonly EnhancedHardwareMonitorService _hardwareMonitor;
         private readonly LoggingService _loggingService = LoggingService.Instance;
-        private DispatcherTimer _updateTimer;
 
         // Properties for data binding
         private float _cpuUsage;
@@ -203,20 +201,13 @@ namespace SysMax2._1.Controls
             // Get hardware monitor service
             _hardwareMonitor = EnhancedHardwareMonitorService.Instance;
 
-            // Initialize with current values
+            // Initialize with current values immediately
             UpdateFromHardwareMonitor();
 
-            // Set up update timer
-            _updateTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(2)
-            };
-            _updateTimer.Tick += UpdateTimer_Tick;
-            _updateTimer.Start();
-
-            // Start hardware monitoring if not already running
+            // Start hardware monitoring if not already running (now uses setting interval)
             if (!_hardwareMonitor.IsMonitoring)
             {
+                // No interval needed here, StartMonitoring reads from settings
                 _hardwareMonitor.StartMonitoring();
             }
 
@@ -227,12 +218,7 @@ namespace SysMax2._1.Controls
             this.Unloaded += UserControl_Unloaded;
 
             // Log initialization
-            _loggingService.Log(LogLevel.Info, "System Metrics Dashboard initialized");
-        }
-
-        private void UpdateTimer_Tick(object? sender, EventArgs e)
-        {
-            UpdateFromHardwareMonitor();
+            _loggingService.Log(LogLevel.Info, "System Metrics Dashboard initialized and subscribed to hardware events");
         }
 
         private void HardwareMonitor_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -272,30 +258,35 @@ namespace SysMax2._1.Controls
 
         private void UpdateFromHardwareMonitor()
         {
-            CpuUsage = _hardwareMonitor?.CpuUsage ?? 0;
-            CpuTemperature = _hardwareMonitor?.CpuTemperature ?? 0;
-            MemoryUsage = _hardwareMonitor?.MemoryUsage ?? 0;
-            AvailableMemory = _hardwareMonitor?.AvailableMemory ?? 0;
-            DiskUsage = _hardwareMonitor?.DiskUsage ?? 0;
-            AvailableDiskSpace = _hardwareMonitor?.AvailableDiskSpace ?? 0;
-            NetworkDownloadSpeed = _hardwareMonitor?.NetworkDownloadSpeed ?? 0;
-            NetworkUploadSpeed = _hardwareMonitor?.NetworkUploadSpeed ?? 0;
-            IsNetworkConnected = _hardwareMonitor?.IsNetworkConnected ?? false;
+            CpuUsage = _hardwareMonitor.CpuUsage;
+            CpuTemperature = _hardwareMonitor.CpuTemperature;
+            MemoryUsage = _hardwareMonitor.MemoryUsage;
+            AvailableMemory = _hardwareMonitor.AvailableMemory;
+            DiskUsage = _hardwareMonitor.DiskUsage;
+            AvailableDiskSpace = _hardwareMonitor.AvailableDiskSpace;
+            NetworkDownloadSpeed = _hardwareMonitor.NetworkDownloadSpeed;
+            NetworkUploadSpeed = _hardwareMonitor.NetworkUploadSpeed;
+            IsNetworkConnected = _hardwareMonitor.IsNetworkConnected;
+            // Ensure indicators are updated based on initial values
+            UpdateCpuHealthIndicator();
+            UpdateMemoryHealthIndicator();
+            UpdateDiskHealthIndicator();
+            UpdateNetworkHealthIndicator();
         }
 
         private void UpdateCpuHealthIndicator()
         {
             if (CpuUsage > 90 || CpuTemperature > 85)
             {
-                CpuHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
+                CpuHealthIndicator.Fill = Application.Current.FindResource("DangerColor") as SolidColorBrush;
             }
             else if (CpuUsage > 70 || CpuTemperature > 75)
             {
-                CpuHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#f39c12"));
+                CpuHealthIndicator.Fill = Application.Current.FindResource("WarningColor") as SolidColorBrush;
             }
             else
             {
-                CpuHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2ecc71"));
+                CpuHealthIndicator.Fill = Application.Current.FindResource("SecondaryColor") as SolidColorBrush;
             }
         }
 
@@ -303,15 +294,15 @@ namespace SysMax2._1.Controls
         {
             if (MemoryUsage > 90)
             {
-                MemoryHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
+                MemoryHealthIndicator.Fill = Application.Current.FindResource("DangerColor") as SolidColorBrush;
             }
             else if (MemoryUsage > 75)
             {
-                MemoryHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#f39c12"));
+                MemoryHealthIndicator.Fill = Application.Current.FindResource("WarningColor") as SolidColorBrush;
             }
             else
             {
-                MemoryHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2ecc71"));
+                MemoryHealthIndicator.Fill = Application.Current.FindResource("SecondaryColor") as SolidColorBrush;
             }
         }
 
@@ -319,15 +310,15 @@ namespace SysMax2._1.Controls
         {
             if (DiskUsage > 90)
             {
-                DiskHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
+                DiskHealthIndicator.Fill = Application.Current.FindResource("DangerColor") as SolidColorBrush;
             }
             else if (DiskUsage > 75)
             {
-                DiskHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#f39c12"));
+                DiskHealthIndicator.Fill = Application.Current.FindResource("WarningColor") as SolidColorBrush;
             }
             else
             {
-                DiskHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2ecc71"));
+                DiskHealthIndicator.Fill = Application.Current.FindResource("SecondaryColor") as SolidColorBrush;
             }
         }
 
@@ -335,11 +326,11 @@ namespace SysMax2._1.Controls
         {
             if (!IsNetworkConnected)
             {
-                NetworkHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
+                NetworkHealthIndicator.Fill = Application.Current.FindResource("DangerColor") as SolidColorBrush;
             }
             else
             {
-                NetworkHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2ecc71"));
+                NetworkHealthIndicator.Fill = Application.Current.FindResource("SecondaryColor") as SolidColorBrush;
             }
         }
 
@@ -350,16 +341,15 @@ namespace SysMax2._1.Controls
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            StopMonitoring();
+            StopMonitoringAndUnsubscribe();
         }
 
-        public void StopMonitoring()
+        public void StopMonitoringAndUnsubscribe()
         {
-            // Stop the update timer (no need to dispose as DispatcherTimer doesn't implement IDisposable)
-            _updateTimer?.Stop();
-
             // Unsubscribe from events
             _hardwareMonitor.PropertyChanged -= HardwareMonitor_PropertyChanged;
+            _loggingService.Log(LogLevel.Info, "System Metrics Dashboard unsubscribed from hardware events");
+            // Note: We don't stop the service here, as other parts of the app might use it.
         }
     }
 }

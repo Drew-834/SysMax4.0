@@ -23,17 +23,17 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0">
-                <TextBlock Text="System Information" FontSize="24" FontWeight="SemiBold" Foreground="White"/>
+                <TextBlock Text="System Information" FontSize="24" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
                 <TextBlock Text="View detailed information about your system hardware and software" 
-                           Foreground="#AAAAAA" Margin="0,5,0,0"/>
+                           Foreground="{StaticResource MutedTextColor}" Margin="0,5,0,0"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click"
-                        Background="#2d2d2d" Foreground="White" BorderThickness="0" 
+                        Background="{StaticResource ButtonBackgroundColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
                         Padding="12,6" Margin="0,0,10,0"/>
                 <Button x:Name="ExportButton" Content="Export Info" Click="ExportButton_Click"
-                        Background="#3498db" Foreground="White" BorderThickness="0" 
+                        Background="{StaticResource PrimaryColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
                         Padding="12,6"/>
             </StackPanel>
         </Grid>
@@ -58,7 +58,7 @@
                                                Grid.ColumnSpan="2" Margin="0,0,0,15"/>
 
                 <!-- System Overview -->
-                <Border Grid.Row="1" Grid.Column="0" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="0,0,10,15">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -67,7 +67,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="System Overview" FontSize="16" FontWeight="SemiBold" 
-                                   Foreground="White" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
 
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -85,40 +85,40 @@
                             </Grid.RowDefinitions>
 
                             <!-- OS Info -->
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="OS:" Foreground="#BBBBBB" Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="OS:" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="0" Grid.Column="1" x:Name="OSValue" Text="Loading..." 
-                                       Foreground="White" Margin="0,0,0,10"/>
+                                       Foreground="{StaticResource LightTextColor}" Margin="0,0,0,10"/>
 
                             <!-- OS Version -->
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Version:" Foreground="#BBBBBB" Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Version:" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="1" Grid.Column="1" x:Name="OSVersionValue" Text="Loading..." 
-                                       Foreground="White" Margin="0,0,0,10"/>
+                                       Foreground="{StaticResource LightTextColor}" Margin="0,0,0,10"/>
 
                             <!-- Computer Name -->
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Computer Name:" Foreground="#BBBBBB" Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Computer Name:" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="2" Grid.Column="1" x:Name="ComputerNameValue" Text="Loading..." 
-                                       Foreground="White" Margin="0,0,0,10"/>
+                                       Foreground="{StaticResource LightTextColor}" Margin="0,0,0,10"/>
 
                             <!-- Username -->
-                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Username:" Foreground="#BBBBBB" Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Username:" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="3" Grid.Column="1" x:Name="UsernameValue" Text="Loading..." 
-                                       Foreground="White" Margin="0,0,0,10"/>
+                                       Foreground="{StaticResource LightTextColor}" Margin="0,0,0,10"/>
 
                             <!-- System Uptime -->
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="System Uptime:" Foreground="#BBBBBB" Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="System Uptime:" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="4" Grid.Column="1" x:Name="UptimeValue" Text="Loading..." 
-                                       Foreground="White" Margin="0,0,0,10"/>
+                                       Foreground="{StaticResource LightTextColor}" Margin="0,0,0,10"/>
 
                             <!-- Last Boot -->
-                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Last Boot:" Foreground="#BBBBBB" Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Last Boot:" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="5" Grid.Column="1" x:Name="LastBootValue" Text="Loading..." 
-                                       Foreground="White" Margin="0,0,0,10"/>
+                                       Foreground="{StaticResource LightTextColor}" Margin="0,0,0,10"/>
                         </Grid>
                     </Grid>
                 </Border>
 
                 <!-- Hardware Info -->
-                <Border Grid.Row="1" Grid.Column="1" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="10,0,0,15">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -127,54 +127,54 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="Hardware" FontSize="16" FontWeight="SemiBold" 
-                                   Foreground="White" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
 
                         <StackPanel Grid.Row="1">
-                            <Border Background="#2a2a2a" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
+                            <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Column="0" Text="CPU" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,15,0"/>
-                                    <TextBlock Grid.Column="1" x:Name="CPUValue" Text="Loading..." Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="0" Text="CPU" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,15,0"/>
+                                    <TextBlock Grid.Column="1" x:Name="CPUValue" Text="Loading..." Foreground="{StaticResource LightTextColor}" TextWrapping="Wrap"/>
                                 </Grid>
                             </Border>
 
-                            <Border Background="#2a2a2a" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
+                            <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Column="0" Text="RAM" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,15,0"/>
-                                    <TextBlock Grid.Column="1" x:Name="RAMValue" Text="Loading..." Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="0" Text="RAM" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,15,0"/>
+                                    <TextBlock Grid.Column="1" x:Name="RAMValue" Text="Loading..." Foreground="{StaticResource LightTextColor}" TextWrapping="Wrap"/>
                                 </Grid>
                             </Border>
 
-                            <Border Background="#2a2a2a" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
+                            <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Column="0" Text="GPU" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,15,0"/>
-                                    <TextBlock Grid.Column="1" x:Name="GPUValue" Text="Loading..." Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="0" Text="GPU" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,15,0"/>
+                                    <TextBlock Grid.Column="1" x:Name="GPUValue" Text="Loading..." Foreground="{StaticResource LightTextColor}" TextWrapping="Wrap"/>
                                 </Grid>
                             </Border>
 
-                            <Border Background="#2a2a2a" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
+                            <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Column="0" Text="Storage" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,15,0"/>
-                                    <TextBlock Grid.Column="1" x:Name="StorageValue" Text="Loading..." Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="0" Text="Storage" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,15,0"/>
+                                    <TextBlock Grid.Column="1" x:Name="StorageValue" Text="Loading..." Foreground="{StaticResource LightTextColor}" TextWrapping="Wrap"/>
                                 </Grid>
                             </Border>
                         </StackPanel>
@@ -182,7 +182,7 @@
                 </Border>
 
                 <!-- Storage Details -->
-                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="0,0,0,15">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -191,12 +191,12 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="Storage Drives" FontSize="16" FontWeight="SemiBold" 
-                                   Foreground="White" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
 
                         <ListView Grid.Row="1" x:Name="StorageListView" Background="Transparent" BorderThickness="0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="#2a2a2a" CornerRadius="6" Padding="15,10" Width="940">
+                                    <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Width="940">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
@@ -205,9 +205,9 @@
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock Grid.Column="0" Text="{Binding DriveName}" FontWeight="SemiBold" 
-                                                       Foreground="White" Margin="0,0,15,0"/>
+                                                       Foreground="{StaticResource LightTextColor}" Margin="0,0,15,0"/>
 
-                                            <TextBlock Grid.Column="1" Text="{Binding DriveType}" Foreground="#BBBBBB" Margin="0,0,15,0"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding DriveType}" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,15,0"/>
 
                                             <Grid Grid.Column="2">
                                                 <Grid.RowDefinitions>
@@ -215,15 +215,13 @@
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
 
-                                                <TextBlock Grid.Row="0" Text="{Binding UsageText}" Foreground="#AAAAAA" 
+                                                <TextBlock Grid.Row="0" Text="{Binding UsageText}" Foreground="{StaticResource MutedTextColor}" 
                                                            HorizontalAlignment="Right" Margin="0,0,0,5"/>
 
-                                                <Grid Grid.Row="1">
-                                                    <Border Background="#3a3a3a" CornerRadius="2" Height="8">
-                                                        <Border HorizontalAlignment="Left" Background="{Binding UsageColor}" 
-                                                                CornerRadius="2" Height="8" Width="{Binding UsagePercentage}"/>
-                                                    </Border>
-                                                </Grid>
+                                                <ProgressBar Grid.Row="1" 
+                                                             Value="{Binding UsageValue}" 
+                                                             Maximum="100"
+                                                             Style="{StaticResource ThemedProgressBarStyle}"/>
                                             </Grid>
                                         </Grid>
                                     </Border>
@@ -234,7 +232,7 @@
                 </Border>
 
                 <!-- Network Info -->
-                <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Background="#252525" BorderBrush="#333333" BorderThickness="1" 
+                <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
                         CornerRadius="8" Padding="20" Margin="0,0,0,15">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -243,12 +241,12 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="Network Interfaces" FontSize="16" FontWeight="SemiBold" 
-                                   Foreground="White" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
 
                         <ListView Grid.Row="1" x:Name="NetworkListView" Background="Transparent" BorderThickness="0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="#2a2a2a" CornerRadius="6" Padding="15,10" Width="940">
+                                    <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Width="940">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
@@ -256,24 +254,24 @@
                                             </Grid.ColumnDefinitions>
 
                                             <StackPanel Grid.Column="0">
-                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="White"/>
-                                                <TextBlock Text="{Binding Description}" Foreground="#AAAAAA" 
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
+                                                <TextBlock Text="{Binding Description}" Foreground="{StaticResource MutedTextColor}" 
                                                            TextWrapping="Wrap" Margin="0,3,0,0"/>
-                                                <TextBlock Text="{Binding AddressInfo}" Foreground="#BBBBBB" Margin="0,5,0,0"/>
+                                                <TextBlock Text="{Binding AddressInfo}" Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
                                             </StackPanel>
 
                                             <Border Grid.Column="1" CornerRadius="4" Padding="8,3" VerticalAlignment="Top">
                                                 <Border.Style>
                                                     <Style TargetType="Border">
-                                                        <Setter Property="Background" Value="#e74c3c"/>
+                                                        <Setter Property="Background" Value="{StaticResource DangerColor}"/>
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                                                                <Setter Property="Background" Value="#2ecc71"/>
+                                                                <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </Border.Style>
-                                                <TextBlock Foreground="White" FontWeight="SemiBold" FontSize="12">
+                                                <TextBlock Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold" FontSize="12">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
                                                             <Setter Property="Text" Value="Disconnected"/>

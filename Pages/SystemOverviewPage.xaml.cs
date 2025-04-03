@@ -10,6 +10,7 @@ using System.Timers;
 using System.Management;
 using System.Threading;
 using System.Net.NetworkInformation;
+using SysMax2._1.Services;
 #nullable enable
 
 namespace SysMax2._1.Pages
@@ -17,50 +18,122 @@ namespace SysMax2._1.Pages
     public partial class SystemOverviewPage : Page
     {
         private bool isScanning = false;
-        private MainWindow mainWindow;
-        private System.Timers.Timer refreshTimer;
+        private MainWindow? mainWindow;
+        private System.Timers.Timer? refreshTimer;
         private CancellationTokenSource? cts;
 
-        private PerformanceCounter? cpuCounter;
-        private PerformanceCounter? ramCounter;
-
-        private NetworkInterface? activeNetworkInterface;
-        private long lastBytesReceived = 0;
-        private long lastBytesSent = 0;
-        private DateTime lastSample = DateTime.Now;
+        private readonly EnhancedHardwareMonitorService _hardwareMonitor = EnhancedHardwareMonitorService.Instance;
 
         public SystemOverviewPage()
         {
             InitializeComponent();
 
             mainWindow = Window.GetWindow(this) as MainWindow;
+            if (mainWindow == null)
+            {
+                Debug.WriteLine("CRITICAL ERROR: Could not find MainWindow reference in SystemOverviewPage.");
+            }
+
+            if (!_hardwareMonitor.IsMonitoring)
+            {
+                _hardwareMonitor.StartMonitoring();
+            }
 
             PopulateSystemInfo();
-            InitializeCounters();
+            UpdateMetrics();
 
             refreshTimer = new System.Timers.Timer(2000);
-            refreshTimer.Elapsed += (s, e) => Dispatcher.Invoke(UpdateMetrics);
+            refreshTimer.Elapsed += OnRefreshTimerElapsed;
             refreshTimer.AutoReset = true;
             refreshTimer.Start();
+
+            _hardwareMonitor.PropertyChanged += HardwareMonitor_PropertyChanged;
+            this.Unloaded += Page_Unloaded;
         }
 
-        private void InitializeCounters()
+        private void OnRefreshTimerElapsed(object? sender, ElapsedEventArgs e)
         {
-            try
-            {
-                cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                ramCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
-
-                cpuCounter.NextValue();
-                ramCounter.NextValue();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error initializing performance counters: {ex.Message}");
-            }
+            Dispatcher.Invoke(UpdateMetrics);
         }
 
-        // ✅ Fixed Quick Actions
+        private void HardwareMonitor_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                switch (e.PropertyName)
+                {
+                    case nameof(_hardwareMonitor.CpuUsage):
+                        CpuUsageValue.Text = $"{_hardwareMonitor.CpuUsage:F1}%";
+                        UpdateHealthIndicator(CpuHealthIndicator, _hardwareMonitor.CpuUsage, 90, 70);
+                        break;
+                    case nameof(_hardwareMonitor.MemoryUsage):
+                        MemoryUsageValue.Text = $"{_hardwareMonitor.MemoryUsage:F1}%";
+                        UpdateHealthIndicator(MemoryHealthIndicator, _hardwareMonitor.MemoryUsage, 90, 75);
+                        break;
+                    case nameof(_hardwareMonitor.IsNetworkConnected):
+                    case nameof(_hardwareMonitor.NetworkDownloadSpeed):
+                    case nameof(_hardwareMonitor.NetworkUploadSpeed):
+                        UpdateNetworkStatus();
+                        break;
+                }
+            });
+        }
+
+        private void UpdateNetworkStatus()
+        {
+            bool isConnected = _hardwareMonitor.IsNetworkConnected;
+            string speedText = "0 Mbps";
+            if (isConnected)
+            {
+                long linkSpeed = 0;
+                try
+                {
+                    NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+                    foreach (NetworkInterface ni in interfaces)
+                    {
+                        if (ni.OperationalStatus == OperationalStatus.Up &&
+                            (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
+                             ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211))
+                        {
+                            linkSpeed = ni.Speed / 1_000_000;
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error getting link speed: {ex.Message}");
+                }
+                speedText = $"{linkSpeed} Mbps";
+            }
+            NetworkStatus.Text = isConnected ? "Connected" : "Disconnected";
+            NetworkSpeedValue.Text = speedText;
+            UpdateHealthIndicator(NetworkHealthIndicator, isConnected ? 100 : 0, 1, 0);
+        }
+
+        private void UpdateHealthIndicator(System.Windows.Shapes.Ellipse indicator, double value, double highThreshold, double mediumThreshold)
+        {
+            if (indicator == null) return;
+            
+            SolidColorBrush colorBrush;
+            if (value >= highThreshold)
+                colorBrush = Application.Current.FindResource("DangerColor") as SolidColorBrush ?? new SolidColorBrush(Colors.Red);
+            else if (value >= mediumThreshold)
+                colorBrush = Application.Current.FindResource("WarningColor") as SolidColorBrush ?? new SolidColorBrush(Colors.Orange);
+            else
+                colorBrush = Application.Current.FindResource("SecondaryColor") as SolidColorBrush ?? new SolidColorBrush(Colors.Green);
+                
+            indicator.Fill = colorBrush;
+        }
+
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            refreshTimer?.Stop();
+            refreshTimer?.Dispose();
+            _hardwareMonitor.PropertyChanged -= HardwareMonitor_PropertyChanged;
+            cts?.Dispose();
+        }
+
         private void QuickAction_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
@@ -170,14 +243,12 @@ namespace SysMax2._1.Pages
             }
         }
 
-        // ✅ Fixed Refresh Button
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             PopulateSystemInfo();
             Debug.WriteLine("System information refreshed");
         }
 
-        // ✅ Fixed Run Scan Button
         private async void RunScanButton_Click(object sender, RoutedEventArgs e)
         {
             if (isScanning)
@@ -217,7 +288,6 @@ namespace SysMax2._1.Pages
             Dispatcher.Invoke(UpdateMetrics);
         }
 
-        // ✅ Fixed `FixIssue_Click`
         private void FixIssue_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
@@ -245,69 +315,28 @@ namespace SysMax2._1.Pages
         {
             try
             {
-                // Fill in the system information
-                OsInfo.Text = Environment.OSVersion.VersionString;
-                CpuInfo.Text = GetProcessorInfo();
-                RamInfo.Text = GetMemoryInfo();  // Now correctly fetching memory
-                GpuInfo.Text = GetGpuInfo();     // Getting GPU info
-                StorageInfo.Text = GetStorageInfo();
-                NetworkInfo.Text = GetNetworkInfo();
-                ComputerNameInfo.Text = Environment.MachineName;
+                var sysInfo = _hardwareMonitor.GetSystemInformation();
 
-                // Update additional metrics
-                UpdateMetrics();
+                OsInfo.Text = sysInfo.ContainsKey("OSName") ? sysInfo["OSName"] : Environment.OSVersion.VersionString;
+                CpuInfo.Text = sysInfo.ContainsKey("ProcessorName") ? sysInfo["ProcessorName"] : "Unknown CPU";
+                RamInfo.Text = sysInfo.ContainsKey("TotalRAM") ? sysInfo["TotalRAM"] : "Unknown Memory";
+                GpuInfo.Text = sysInfo.ContainsKey("GPUName") ? sysInfo["GPUName"] : "Unknown GPU";
+                StorageInfo.Text = GetStorageInfo();
+                NetworkInfo.Text = sysInfo.ContainsKey("NetworkAdapter") ? sysInfo["NetworkAdapter"] : "Unknown Network";
+                ComputerNameInfo.Text = sysInfo.ContainsKey("ComputerName") ? sysInfo["ComputerName"] : Environment.MachineName;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error populating system info: {ex.Message}");
+                OsInfo.Text = Environment.OSVersion.VersionString;
+                CpuInfo.Text = "Error Loading";
+                RamInfo.Text = "Error Loading";
+                GpuInfo.Text = "Error Loading";
+                StorageInfo.Text = "Error Loading";
+                NetworkInfo.Text = "Error Loading";
+                ComputerNameInfo.Text = Environment.MachineName;
             }
         }
-
-        private string GetProcessorInfo() =>
-            Microsoft.Win32.Registry.LocalMachine
-                .OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0")?
-                .GetValue("ProcessorNameString") as string ?? "Unknown CPU";
-
-        private string GetMemoryInfo()
-        {
-            try
-            {
-                using (var searcher = new ManagementObjectSearcher("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem"))
-                {
-                    foreach (var obj in searcher.Get())
-                    {
-                        long totalMemory = Convert.ToInt64(obj["TotalPhysicalMemory"]);
-                        double totalMemoryInGB = totalMemory / 1024.0 / 1024.0 / 1024.0; // Convert bytes to GB
-                        return $"{totalMemoryInGB:F1} GB";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error getting memory info: {ex.Message}");
-            }
-            return "Unknown Memory";
-        }
-
-
-        // ✅ Fixed `GetGpuInfo()` - Always Returns a Value
-        private string GetGpuInfo()
-        {
-            try
-            {
-                using var searcher = new ManagementObjectSearcher("SELECT Name FROM Win32_VideoController");
-                foreach (var obj in searcher.Get())
-                {
-                    return obj["Name"]?.ToString() ?? "Unknown GPU";
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error getting GPU info: {ex.Message}");
-            }
-            return "Unknown GPU";
-        }
-
 
         private string GetStorageInfo()
         {
@@ -334,103 +363,25 @@ namespace SysMax2._1.Pages
                 return "Unknown Storage";
             }
         }
-        private string GetNetworkInfo()
-        {
-            try
-            {
-                string result = "";
-                NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
-
-                foreach (NetworkInterface ni in interfaces)
-                {
-                    if (ni.OperationalStatus == OperationalStatus.Up &&
-                        (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
-                         ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211))
-                    {
-                        result += $"{ni.Name} ({ni.NetworkInterfaceType})\n";
-                    }
-                }
-
-                return string.IsNullOrWhiteSpace(result) ? "No active network connection" : result.TrimEnd('\n');
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error getting network info: {ex.Message}");
-                return "Unknown Network Configuration";
-            }
-        }
 
         private void UpdateMetrics()
         {
             try
             {
-                // ✅ CPU and Memory Usage
-                CpuUsageValue.Text = $"{cpuCounter?.NextValue():F1}%";
-                MemoryUsageValue.Text = $"{ramCounter?.NextValue():F1}%";
-
-                // ✅ Network Speed (Adapter Link Speed)
-                bool isNetworkConnected = NetworkInterface.GetIsNetworkAvailable();
-                long networkSpeed = 0;
-
-                if (isNetworkConnected)
-                {
-                    if (activeNetworkInterface == null || activeNetworkInterface.OperationalStatus != OperationalStatus.Up)
-                    {
-                        NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
-
-                        foreach (NetworkInterface ni in interfaces)
-                        {
-                            if (ni.OperationalStatus == OperationalStatus.Up &&
-                                (ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
-                                 ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211))
-                            {
-                                activeNetworkInterface = ni;
-                                networkSpeed = ni.Speed / 1_000_000; // Convert bits to Mbps
-                                Debug.WriteLine($"✅ Active network interface set to: {ni.Name}, Speed: {networkSpeed} Mbps");
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        networkSpeed = activeNetworkInterface.Speed / 1_000_000;
-                    }
-                }
-
-                // ✅ Update Network Status
-                NetworkStatus.Text = isNetworkConnected ? "Connected" : "Disconnected";
-                NetworkSpeedValue.Text = isNetworkConnected
-                    ? $"{networkSpeed} Mbps"
-                    : "0 Mbps";
-
-                // ✅ Update Health Indicator
-                if (!isNetworkConnected)
-                {
-                    NetworkHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e74c3c"));
-                }
-                else if (networkSpeed < 10)
-                {
-                    NetworkHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#f39c12"));
-                }
-                else
-                {
-                    NetworkHealthIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2ecc71"));
-                }
+                CpuUsageValue.Text = $"{_hardwareMonitor.CpuUsage:F1}%";
+                MemoryUsageValue.Text = $"{_hardwareMonitor.MemoryUsage:F1}%";
+                
+                UpdateHealthIndicator(CpuHealthIndicator, _hardwareMonitor.CpuUsage, 90, 70);
+                UpdateHealthIndicator(MemoryHealthIndicator, _hardwareMonitor.MemoryUsage, 90, 75);
+                
+                UpdateNetworkStatus();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"❌ Error updating metrics: {ex.Message}");
-                NetworkSpeedValue.Text = "Error";
+                CpuUsageValue.Text = "Err";
+                MemoryUsageValue.Text = "Err";
             }
-        }
-
-
-        ~SystemOverviewPage()
-        {
-            refreshTimer?.Stop();
-            refreshTimer?.Dispose();
-            cpuCounter?.Dispose();
-            ramCounter?.Dispose();
         }
     }
 }
