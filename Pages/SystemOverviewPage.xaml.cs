@@ -11,6 +11,7 @@ using System.Management;
 using System.Threading;
 using System.Net.NetworkInformation;
 using SysMax2._1.Services;
+using SysMax2._1.Models;
 #nullable enable
 
 namespace SysMax2._1.Pages
@@ -22,6 +23,7 @@ namespace SysMax2._1.Pages
         private System.Timers.Timer? refreshTimer;
         private CancellationTokenSource? cts;
 
+        private readonly LoggingService _loggingService = LoggingService.Instance;
         private readonly EnhancedHardwareMonitorService _hardwareMonitor = EnhancedHardwareMonitorService.Instance;
 
         public SystemOverviewPage()
@@ -69,6 +71,10 @@ namespace SysMax2._1.Pages
                     case nameof(_hardwareMonitor.MemoryUsage):
                         MemoryUsageValue.Text = $"{_hardwareMonitor.MemoryUsage:F1}%";
                         UpdateHealthIndicator(MemoryHealthIndicator, _hardwareMonitor.MemoryUsage, 90, 75);
+                        break;
+                    case nameof(_hardwareMonitor.AvailableMemory):
+                        double availableGB = _hardwareMonitor.AvailableMemory / (1024.0 * 1024 * 1024);
+                        MemoryAvailable.Text = $"{availableGB:F1} GB Free";
                         break;
                     case nameof(_hardwareMonitor.IsNetworkConnected):
                     case nameof(_hardwareMonitor.NetworkDownloadSpeed):
@@ -319,7 +325,9 @@ namespace SysMax2._1.Pages
 
                 OsInfo.Text = sysInfo.ContainsKey("OSName") ? sysInfo["OSName"] : Environment.OSVersion.VersionString;
                 CpuInfo.Text = sysInfo.ContainsKey("ProcessorName") ? sysInfo["ProcessorName"] : "Unknown CPU";
-                RamInfo.Text = sysInfo.ContainsKey("TotalRAM") ? sysInfo["TotalRAM"] : "Unknown Memory";
+                string totalRamDisplay = sysInfo.ContainsKey("TotalRAM") ? sysInfo["TotalRAM"] : "Unknown Memory";
+                _loggingService.Log(LogLevel.Info, $"[PopulateSystemInfo] Setting RamInfo.Text to: {totalRamDisplay}");
+                RamInfo.Text = totalRamDisplay;
                 GpuInfo.Text = sysInfo.ContainsKey("GPUName") ? sysInfo["GPUName"] : "Unknown GPU";
                 StorageInfo.Text = GetStorageInfo();
                 NetworkInfo.Text = sysInfo.ContainsKey("NetworkAdapter") ? sysInfo["NetworkAdapter"] : "Unknown Network";
@@ -370,6 +378,10 @@ namespace SysMax2._1.Pages
             {
                 CpuUsageValue.Text = $"{_hardwareMonitor.CpuUsage:F1}%";
                 MemoryUsageValue.Text = $"{_hardwareMonitor.MemoryUsage:F1}%";
+                
+                double availableGB = _hardwareMonitor.AvailableMemory / (1024.0 * 1024 * 1024);
+                _loggingService.Log(LogLevel.Info, $"[UpdateMetrics] Setting MemoryAvailable.Text based on AvailableMemory: {_hardwareMonitor.AvailableMemory} bytes ({availableGB:F1} GB)");
+                MemoryAvailable.Text = $"{availableGB:F1} GB Free";
                 
                 UpdateHealthIndicator(CpuHealthIndicator, _hardwareMonitor.CpuUsage, 90, 70);
                 UpdateHealthIndicator(MemoryHealthIndicator, _hardwareMonitor.MemoryUsage, 90, 75);

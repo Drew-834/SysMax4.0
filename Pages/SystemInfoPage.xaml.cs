@@ -198,8 +198,8 @@ namespace SysMax2._1.Pages
                 // Get Total RAM from the monitoring service
                 string totalRamStr = systemInfo.GetValueOrDefault("TotalRAM", "N/A");
                 
-                // Get Available RAM using WMI
-                string availableRamStr = GetAvailableRamWmi();
+                // Get Available RAM from the monitoring service dictionary
+                string availableRamStr = systemInfo.GetValueOrDefault("AvailableRAM", "N/A");
                 
                 // Format the RAM display text
                 RAMValue.Text = $"Total: {totalRamStr} (Available: {availableRamStr})";
@@ -222,30 +222,6 @@ namespace SysMax2._1.Pages
                 RAMValue.Text = "Information Unavailable";
                 GPUValue.Text = "Information Unavailable";
                 StorageValue.Text = "Information Unavailable";
-            }
-        }
-
-        private string GetAvailableRamWmi()
-        {
-            try
-            {
-                ObjectQuery wmiQuery = new ObjectQuery("SELECT FreePhysicalMemory FROM Win32_OperatingSystem");
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
-                ManagementObjectCollection results = searcher.Get();
-
-                foreach (ManagementObject result in results)
-                {
-                    // FreePhysicalMemory is in KB, convert to GB
-                    ulong freeMemoryKB = (ulong)result["FreePhysicalMemory"];
-                    double freeMemoryGB = freeMemoryKB / (1024.0 * 1024.0);
-                    return $"{freeMemoryGB:F1} GB";
-                }
-                return "WMI Query Failed"; // Should not happen if query succeeds
-            }
-            catch (Exception ex)
-            {
-                _loggingService.Log(LogLevel.Warning, $"Failed to query WMI for Available RAM: {ex.Message}");
-                return "Error";
             }
         }
 
@@ -367,18 +343,8 @@ namespace SysMax2._1.Pages
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             UpdateUptimeInfo();
-            UpdateAvailableRamWmi();
-        }
-
-        private void UpdateAvailableRamWmi()
-        {
-            // Get Total RAM from the monitoring service (needed for the label)
-            string totalRamStr = _hardwareMonitor.GetSystemInformation().GetValueOrDefault("TotalRAM", "N/A");
-            // Get updated Available RAM using WMI
-            string availableRamStr = GetAvailableRamWmi();
-
-            // Update the UI
-            RAMValue.Text = $"Total: {totalRamStr} (Available: {availableRamStr})";
+            // RAM is updated via the hardware monitor service PropertyChanged event now for Overview,
+            // and this page's value is static after load (or refresh button)
         }
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)

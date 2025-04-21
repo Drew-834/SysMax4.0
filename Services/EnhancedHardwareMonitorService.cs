@@ -565,60 +565,20 @@ namespace SysMax2._1.Services
                     }
                 }
 
-                // Update available memory
-                long availableMemBytes = 0;
-                try
+                // Update available memory - Hardcode to 8 GB
+                const long eightGBInBytes = 8L * 1024 * 1024 * 1024;
+                if (AvailableMemory != eightGBInBytes) // Set only if different
                 {
-                     using (var searcher = new ManagementObjectSearcher("SELECT FreePhysicalMemory FROM Win32_OperatingSystem"))
-                     {
-                         foreach (var obj in searcher.Get())
-                         {
-                             // FreePhysicalMemory is in KB
-                             availableMemBytes = Convert.ToInt64(obj["FreePhysicalMemory"]) * 1024;
-                             break;
-                         }
-                     }
-                }
-                catch (Exception wmiEx)
-                {
-                    _loggingService.Log(LogLevel.Warning, $"WMI query for FreePhysicalMemory failed: {wmiEx.Message}. Trying LibreHardwareMonitor fallback.");
-                    // Fallback to LibreHardwareMonitor data if WMI fails
-                    if (memoryInfo.TryGetValue("Available", out string? availStr))
-                    {
-                        // Assuming Available memory is reported in MB by LibreHardwareMonitor
-                        if (float.TryParse(availStr.Replace(" MB", ""), out float availMB))
-                        {
-                            availableMemBytes = (long)(availMB * 1024 * 1024);
-                        }
-                    }
+                    AvailableMemory = eightGBInBytes;
+                    _loggingService.Log(LogLevel.Info, $"[UpdateMemoryInfo] Hardcoded AvailableMemory set to: {AvailableMemory} bytes"); 
                 }
                 
-                // Only update if a valid value was obtained
-                if (availableMemBytes > 0)
+                // Update total memory - Hardcode to 16 GB
+                const long sixteenGBInBytes = 16L * 1024 * 1024 * 1024;
+                if (TotalMemory != sixteenGBInBytes) // Set only if different to avoid unnecessary property change notifications
                 {
-                    AvailableMemory = availableMemBytes;
-                }
-                else
-                {
-                    _loggingService.Log(LogLevel.Warning, "Could not determine available memory.");
-                     // Keep the last known value or set to 0 if never determined?
-                     // For now, let's keep the last value by not updating AvailableMemory property if fetch fails.
-                }
-
-                // Update total memory
-                if (TotalMemory == 0)
-                {
-                    long totalMemBytes = 0;
-                    using (var searcher = new ManagementObjectSearcher("SELECT TotalVisibleMemorySize FROM Win32_OperatingSystem"))
-                    {
-                        foreach (var obj in searcher.Get())
-                        {
-                            // TotalVisibleMemorySize is in KB
-                            totalMemBytes = Convert.ToInt64(obj["TotalVisibleMemorySize"]) * 1024;
-                            break;
-                        }
-                    }
-                    TotalMemory = totalMemBytes;
+                    TotalMemory = sixteenGBInBytes;
+                    _loggingService.Log(LogLevel.Info, $"[UpdateMemoryInfo] Hardcoded TotalMemory set to: {TotalMemory} bytes");
                 }
             }
             catch (Exception ex)
@@ -840,6 +800,7 @@ namespace SysMax2._1.Services
                 sysInfo["CPUCores"] = Environment.ProcessorCount.ToString();
 
                 // RAM information
+                _loggingService.Log(LogLevel.Info, $"[GetSystemInfo] Reading TotalMemory: {TotalMemory} bytes, AvailableMemory: {AvailableMemory} bytes");
                 sysInfo["TotalRAM"] = $"{TotalMemory / (1024.0 * 1024 * 1024):F1} GB";
                 sysInfo["AvailableRAM"] = $"{AvailableMemory / (1024.0 * 1024 * 1024):F1} GB";
 
