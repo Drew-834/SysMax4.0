@@ -12,6 +12,7 @@ using System.Linq;
 
 using SysMax2._1.Pages;
 using SysMax2._1.Models;
+using SysMax2._1.Services;
 
 
 #nullable disable
@@ -77,6 +78,9 @@ namespace SysMax2._1
 
             // Set default status
             UpdateStatus("Application started. System ready.");
+            
+            // Apply initial user mode interface state
+            ApplyUserModeInterface(currentUserMode); // Ensure initial state is Basic
         }
 
         private void InitializeStatusTimer()
@@ -92,28 +96,25 @@ namespace SysMax2._1
             // Update CPU and RAM usage in status bar
             try
             {
-                // In a real implementation, use LibreHardwareMonitorLib to get actual values
-                // This is a simplified placeholder
-                var process = Process.GetCurrentProcess();
-                var cpuUsage = new Random().Next(1, 100); // Placeholder
-                var memoryUsageInMB = process.WorkingSet64 / 1024 / 1024;
-                var totalMemoryInMB = (long)(new PerformanceCounter("Memory", "Available MBytes").NextValue() * 1.5);
-                var memoryPercentage = (int)(memoryUsageInMB * 100 / totalMemoryInMB);
+                // Get actual values from the monitoring service
+                var systemInfo = EnhancedHardwareMonitorService.Instance.GetSystemInformation();
+                int cpuUsage = systemInfo.TryGetValue("CPU Load", out string cpuLoadStr) && 
+                               int.TryParse(cpuLoadStr.Replace("%", ""), out int cpu) ? cpu : 0;
+                int memoryPercentage = systemInfo.TryGetValue("Memory Used Percentage", out string memPercStr) && 
+                                       int.TryParse(memPercStr.Replace("%", ""), out int mem) ? mem : 0;
 
                 // Update UI
-                
-                // TODO -------------------------------------------------------
-                //CPUUsageStatus.Text = $"CPU: {cpuUsage}%";
-                //MemoryUsageStatus.Text = $"RAM: {memoryPercentage}%";
+                CPUUsageStatus.Text = $"CPU: {cpuUsage}%";
+                MemoryUsageStatus.Text = $"RAM: {memoryPercentage}%";
 
-                //// Color coding for high usage
-                //CPUUsageStatus.Foreground = cpuUsage > 80 ? new SolidColorBrush(Colors.OrangeRed) :
-                //                          (cpuUsage > 60 ? new SolidColorBrush(Colors.Orange) :
-                //                          (SolidColorBrush)Resources["MutedTextColor"]);
+                // Color coding for high usage
+                CPUUsageStatus.Foreground = cpuUsage > 80 ? (SolidColorBrush)FindResource("DangerColor") :
+                                          (cpuUsage > 60 ? (SolidColorBrush)FindResource("WarningColor") :
+                                          (SolidColorBrush)FindResource("MutedTextColor"));
 
-                //MemoryUsageStatus.Foreground = memoryPercentage > 80 ? new SolidColorBrush(Colors.OrangeRed) :
-                //                             (memoryPercentage > 60 ? new SolidColorBrush(Colors.Orange) :
-                //                             (SolidColorBrush)Resources["MutedTextColor"]);
+                MemoryUsageStatus.Foreground = memoryPercentage > 80 ? (SolidColorBrush)FindResource("DangerColor") :
+                                             (memoryPercentage > 60 ? (SolidColorBrush)FindResource("WarningColor") :
+                                             (SolidColorBrush)FindResource("MutedTextColor"));
 
                 // Check for concerning system states and update assistant in Basic mode
                 if (currentUserMode == "Basic" && isAssistantPanelOpen)
@@ -156,10 +157,43 @@ namespace SysMax2._1
         private void Navigation_Click(object sender, RoutedEventArgs e)
         {
             // Get the name of the clicked navigation item
-            if (sender is Button button)
+            if (sender is Button clickedButton)
             {
-                string pageName = button.Name.Replace("Nav", "");
+                // Clear the Tag from all navigation buttons
+                foreach (var child in FindVisualChildren<Button>(this)) // Assuming FindVisualChildren exists and works
+                {
+                    if (child.Name.StartsWith("Nav"))
+                    {
+                        child.Tag = null; // Or string.Empty
+                    }
+                }
+
+                // Set the Tag on the clicked button
+                clickedButton.Tag = "Active";
+
+                string pageName = clickedButton.Name.Replace("Nav", "");
                 NavigateToPage(pageName);
+            }
+        }
+
+        // Helper to find visual children (replace with your actual implementation if different)
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T t)
+                    {
+                        yield return t;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
             }
         }
 
@@ -186,41 +220,65 @@ namespace SysMax2._1
 
         private void ApplyUserModeInterface(string userMode)
         {
-            // In a real implementation, show/hide elements based on the user mode
-            // Here we're just showing different behaviors based on mode
+            bool isProMode = (userMode == "Pro");
 
-            // For this example:
-            // - Basic mode: Show assistant, simpler UI
-            // - Pro mode: Hide assistant by default, more detailed UI
+            // Determine visibility for navigation items
+            // These are always visible
+            NavOverview.Visibility = Visibility.Visible;
+            NavOptimization.Visibility = Visibility.Visible;
+            NavSystemInfo.Visibility = Visibility.Visible;
+            NavSettings.Visibility = Visibility.Visible;
+            NavHelp.Visibility = Visibility.Visible;
+            
+            // These are Pro-only (but currently non-functional/placeholder)
+            // Keep them collapsed for now in ALL modes until implemented
+            NavCPU.Visibility = Visibility.Collapsed; // isProMode ? Visibility.Visible : Visibility.Collapsed;
+            NavMemory.Visibility = Visibility.Collapsed; // isProMode ? Visibility.Visible : Visibility.Collapsed;
+            NavStorage.Visibility = Visibility.Collapsed; // isProMode ? Visibility.Visible : Visibility.Collapsed;
+            NavNetwork.Visibility = Visibility.Collapsed; // isProMode ? Visibility.Visible : Visibility.Collapsed;
+            NavDiagnostics.Visibility = Visibility.Collapsed; // isProMode ? Visibility.Visible : Visibility.Collapsed;
+
+            // These are Pro-only and functional
+            NavLogs.Visibility = isProMode ? Visibility.Visible : Visibility.Collapsed;
+            NavIssues.Visibility = isProMode ? Visibility.Visible : Visibility.Collapsed;
+            
 
             if (userMode == "Basic")
             {
-                // Basic mode - show assistant
+                // Basic mode specific actions
                 AssistantContainer.Visibility = Visibility.Visible;
-
-                // If we're on the Overview page, switch to the Basic version
-                if (currentPage == "Overview")
+                // If a Pro-only page was active, navigate back to Overview
+                if (IsProOnlyPage(currentPage))
+                {
+                    NavigateToPage("Overview"); // This will also trigger the Basic Overview page load
+                }
+                else if (currentPage == "Overview") // Ensure correct Overview page is loaded if already there
                 {
                     NavigateToPage("Overview");
                 }
 
-                // Update assistant message
                 if (isAssistantPanelOpen)
                 {
                     UpdateAssistantMessage("I'm here to help! The Basic mode shows you simplified information about your computer's health.");
                 }
             }
-            else if (userMode == "Pro")
+            else // Pro Mode
             {
-                // Pro mode - hide assistant by default
-                CloseAssistantPanel();
-
-                // If we're on the Overview page, switch to the Pro version
+                // Pro mode specific actions
+                CloseAssistantPanel(); // Hide assistant by default
+                // Ensure correct Overview page is loaded if currently on Overview
                 if (currentPage == "Overview")
                 {
                     NavigateToPage("Overview");
                 }
             }
+        }
+
+        private bool IsProOnlyPage(string pageName)
+        {
+            return pageName == "CPU" || pageName == "Memory" || pageName == "Storage" || 
+                   pageName == "Network" || pageName == "Diagnostics" || pageName == "Logs" ||
+                   pageName == "Issues";
         }
 
         private void AssistantButton_Click(object sender, RoutedEventArgs e)
@@ -508,19 +566,6 @@ namespace SysMax2._1
                 case "Help":
                     // Create HelpSupportPage
                     newPage = new Pages.HelpSupportPage();
-                    break;
-
-                case "Network":
-                case "CPU":
-                case "Memory":
-                case "Storage":
-                    // For now, use placeholders for these pages
-                    newPage = CreatePlaceholderPage(pageName);
-                    break;
-
-                case "Diagnostics":
-                    // Create DiagnosticsPage
-                    newPage = new Pages.DiagnosticsPage();
                     break;
 
                 case "Optimization":

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="SysMax - System Health Monitor" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" 
-        Background="#FF1E1E1E"
+        Background="{StaticResource DarkBackgroundColor}"
         ResizeMode="CanResize"
         MinWidth="960" MinHeight="600">
 
@@ -33,7 +33,7 @@
         </Grid.RowDefinitions>
 
         <!-- Top Header -->
-        <Border Grid.Row="0" Background="#252525" BorderThickness="0,0,0,1" BorderBrush="#333333">
+        <Border Grid.Row="0" Background="{StaticResource PanelBackgroundColor}" BorderThickness="0,0,0,1" BorderBrush="{StaticResource PanelBorderColor}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -53,9 +53,9 @@
                     <TextBlock Text="User Mode:" Foreground="{StaticResource MutedTextColor}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <StackPanel Orientation="Horizontal">
                         <ToggleButton x:Name="BasicUserToggle" Content="Basic" IsChecked="True" Click="UserToggle_Click" Tag="Basic"
-                                     Background="#2d2d2d" Foreground="White" BorderThickness="0" Padding="10,5" Margin="0,0,5,0"/>
+                                     Background="{StaticResource ButtonBackgroundColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" Padding="10,5" Margin="0,0,5,0"/>
                         <ToggleButton x:Name="ITProToggle" Content="Pro" Click="UserToggle_Click" Tag="Pro"
-                                     Background="#2d2d2d" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" Padding="10,5"/>
+                                     Background="{StaticResource ButtonBackgroundColor}" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" Padding="10,5"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
@@ -69,37 +69,25 @@
             </Grid.ColumnDefinitions>
 
             <!-- Left Navigation -->
-            <Border Grid.Column="0" Background="#222222" BorderThickness="0,0,1,0" BorderBrush="#333333">
+            <Border Grid.Column="0" Background="{StaticResource PanelBackgroundColor}" BorderThickness="0,0,1,0" BorderBrush="{StaticResource PanelBorderColor}">
                 <StackPanel>
-                    <TextBlock Text="DASHBOARD" Margin="15,20,15,10" Foreground="#666666" FontSize="12"/>
-                    <Button x:Name="NavOverview" Content="System Overview" Background="Transparent" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click"/>
-                    <Button x:Name="NavCPU" Content="CPU Performance" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click" Visibility="Collapsed"/>
-                    <Button x:Name="NavMemory" Content="Memory Usage" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click" Visibility="Collapsed"/>
-                    <Button x:Name="NavStorage" Content="Storage Status" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click" Visibility="Collapsed"/>
-                    <Button x:Name="NavNetwork" Content="Network Status" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click" Visibility="Collapsed"/>
+                    <TextBlock Text="DASHBOARD" Margin="15,20,15,10" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
+                    <Button x:Name="NavOverview" Content="System Overview" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click" Tag="Active"/>
+                    <Button x:Name="NavCPU" Content="CPU Performance" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click" Visibility="Collapsed"/>
+                    <Button x:Name="NavMemory" Content="Memory Usage" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click" Visibility="Collapsed"/>
+                    <Button x:Name="NavStorage" Content="Storage Status" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click" Visibility="Collapsed"/>
+                    <Button x:Name="NavNetwork" Content="Network Status" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click" Visibility="Collapsed"/>
 
-                    <TextBlock Text="TOOLS" Margin="15,20,15,10" Foreground="#666666" FontSize="12"/>
-                    <Button x:Name="NavDiagnostics" Content="Diagnostics" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click" Visibility="Collapsed"/>
-                    <Button x:Name="NavOptimization" Content="Optimization" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click"/>
-                    <Button x:Name="NavSystemInfo" Content="System Information" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click"/>
-                    <Button x:Name="NavLogs" Content="System Logs" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click"/>
-                    <Button x:Name="NavIssues" Content="Active Issues" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click"/>
+                    <TextBlock Text="TOOLS" Margin="15,20,15,10" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
+                    <Button x:Name="NavDiagnostics" Content="Diagnostics" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click" Visibility="Collapsed"/>
+                    <Button x:Name="NavOptimization" Content="Optimization" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click"/>
+                    <Button x:Name="NavSystemInfo" Content="System Information" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click"/>
+                    <Button x:Name="NavLogs" Content="System Logs" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click"/>
+                    <Button x:Name="NavIssues" Content="Active Issues" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click"/>
 
-                    <TextBlock Text="SETTINGS" Margin="15,20,15,10" Foreground="#666666" FontSize="12"/>
-                    <Button x:Name="NavSettings" Content="Application Settings" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click"/>
-                    <Button x:Name="NavHelp" Content="Help &amp; Support" Background="Transparent" Foreground="{StaticResource MutedTextColor}" BorderThickness="0" 
-                            Padding="15,10" Margin="5,2" HorizontalContentAlignment="Left" Click="Navigation_Click"/>
+                    <TextBlock Text="SETTINGS" Margin="15,20,15,10" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
+                    <Button x:Name="NavSettings" Content="Application Settings" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click"/>
+                    <Button x:Name="NavHelp" Content="Help &amp; Support" Style="{StaticResource NavButtonStyle}" Click="Navigation_Click"/>
 
                 </StackPanel>
             </Border>
@@ -125,7 +113,7 @@
 
                     <!-- Assistant Message Panel -->
                     <Border x:Name="AssistantPanel" Grid.Row="0" Margin="0,0,0,10" Width="300"
-                            Background="#2f2f2f" BorderBrush="#404040" BorderThickness="1"
+                            Background="{StaticResource ButtonBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1"
                             CornerRadius="8" Padding="15" MaxHeight="250">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -137,7 +125,7 @@
                                 <TextBlock Text="SysMax Assistant" FontWeight="SemiBold" Foreground="{StaticResource PrimaryColor}"/>
                                 <Button x:Name="CloseAssistant" HorizontalAlignment="Right" Width="20" Height="20"
                                         Background="Transparent" BorderThickness="0" Click="CloseAssistant_Click">
-                                    <TextBlock Text="✕" FontSize="12" Foreground="White"/>
+                                    <TextBlock Text="✕" FontSize="12" Foreground="{StaticResource LightTextColor}"/>
                                 </Button>
                             </Grid>
 
@@ -151,7 +139,7 @@
         </Grid>
 
         <!-- Status Bar -->
-        <Border Grid.Row="2" Background="#252525" BorderThickness="0,1,0,0" BorderBrush="#333333" Height="28">
+        <Border Grid.Row="2" Background="{StaticResource PanelBackgroundColor}" BorderThickness="0,1,0,0" BorderBrush="{StaticResource PanelBorderColor}" Height="28">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -164,9 +152,9 @@
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,15,0">
                     <TextBlock x:Name="CPUUsageStatus" Text="CPU: 0%" Foreground="{StaticResource MutedTextColor}" 
-                               VerticalAlignment="Center" Margin="10,0,0,0" FontSize="12" Visibility="Hidden"/>
+                               VerticalAlignment="Center" Margin="10,0,0,0" FontSize="12" Visibility="Collapsed" />
                     <TextBlock x:Name="MemoryUsageStatus" Text="RAM: 0%" Foreground="{StaticResource MutedTextColor}" 
-                               VerticalAlignment="Center" Margin="10,0,0,0" FontSize="12" Visibility="Hidden"/>
+                               VerticalAlignment="Center" Margin="10,0,0,0" FontSize="12" Visibility="Collapsed" />
                 </StackPanel>
             </Grid>
         </Border>

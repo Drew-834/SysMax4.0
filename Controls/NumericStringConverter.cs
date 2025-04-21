@@ -56,7 +56,27 @@ namespace SysMax2._1.Controls
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value is string stringValue)
+            {
+                // Remove known units or formatting based on the original parameter
+                stringValue = stringValue.Replace("°C", "").Trim();
+                // Add more replacements here if other formats are added (e.g., "%", " GB")
+                
+                if (double.TryParse(stringValue, NumberStyles.Any, culture, out double result))
+                {
+                    // Try to convert to the target type (e.g., int, double)
+                    try 
+                    {
+                        return System.Convert.ChangeType(result, targetType);
+                    }
+                    catch
+                    {
+                        return Binding.DoNothing; // Conversion to target type failed
+                    }
+                }
+            }
+            // If parsing fails or input is not a string, indicate that the value cannot be converted
+            return Binding.DoNothing;
         }
     }
 }

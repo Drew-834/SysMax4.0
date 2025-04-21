@@ -23,18 +23,16 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0">
-                <TextBlock Text="System Information" FontSize="24" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
+                <TextBlock Text="System Information" Style="{StaticResource PageHeaderStyle}" Margin="0"/>
                 <TextBlock Text="View detailed information about your system hardware and software" 
                            Foreground="{StaticResource MutedTextColor}" Margin="0,5,0,0"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click"
-                        Background="{StaticResource ButtonBackgroundColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
-                        Padding="12,6" Margin="0,0,10,0"/>
+                        Style="{StaticResource OutlineButtonStyle}" Padding="{StaticResource SmallButtonPadding}" Margin="0,0,10,0"/>
                 <Button x:Name="ExportButton" Content="Export Info" Click="ExportButton_Click"
-                        Background="{StaticResource PrimaryColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
-                        Padding="12,6"/>
+                        Style="{StaticResource PrimaryButtonStyle}" Padding="{StaticResource SmallButtonPadding}"/>
             </StackPanel>
         </Grid>
 
@@ -58,16 +56,14 @@
                                                Grid.ColumnSpan="2" Margin="0,0,0,15"/>
 
                 <!-- System Overview -->
-                <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
-                        CornerRadius="8" Padding="20" Margin="0,0,10,15">
+                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,10,15">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="System Overview" FontSize="16" FontWeight="SemiBold" 
-                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
+                        <TextBlock Grid.Row="0" Text="System Overview" Style="{StaticResource CardHeaderStyle}"/>
 
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -118,19 +114,17 @@
                 </Border>
 
                 <!-- Hardware Info -->
-                <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
-                        CornerRadius="8" Padding="20" Margin="10,0,0,15">
+                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource CardStyle}" Margin="10,0,0,15">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Hardware" FontSize="16" FontWeight="SemiBold" 
-                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
+                        <TextBlock Grid.Row="0" Text="Hardware" Style="{StaticResource CardHeaderStyle}"/>
 
                         <StackPanel Grid.Row="1">
-                            <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
+                            <Border Style="{StaticResource MetricCardStyle}" Padding="{StaticResource MediumPadding}" Margin="0,0,0,10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -142,7 +136,7 @@
                                 </Grid>
                             </Border>
 
-                            <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
+                            <Border Style="{StaticResource MetricCardStyle}" Padding="{StaticResource MediumPadding}" Margin="0,0,0,10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -154,7 +148,7 @@
                                 </Grid>
                             </Border>
 
-                            <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
+                            <Border Style="{StaticResource MetricCardStyle}" Padding="{StaticResource MediumPadding}" Margin="0,0,0,10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -166,7 +160,7 @@
                                 </Grid>
                             </Border>
 
-                            <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Margin="0,0,0,10">
+                            <Border Style="{StaticResource MetricCardStyle}" Padding="{StaticResource MediumPadding}" Margin="0,0,0,10">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -182,21 +176,25 @@
                 </Border>
 
                 <!-- Storage Details -->
-                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
-                        CornerRadius="8" Padding="20" Margin="0,0,0,15">
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource CardStyle}" Margin="0,0,0,15">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Storage Drives" FontSize="16" FontWeight="SemiBold" 
-                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
+                        <TextBlock Grid.Row="0" Text="Storage Drives" Style="{StaticResource CardHeaderStyle}"/>
 
                         <ListView Grid.Row="1" x:Name="StorageListView" Background="Transparent" BorderThickness="0">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Margin" Value="0,0,0,5"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Width="940">
+                                    <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="{StaticResource MediumPadding}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
@@ -232,21 +230,25 @@
                 </Border>
 
                 <!-- Network Info -->
-                <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource PanelBackgroundColor}" BorderBrush="{StaticResource PanelBorderColor}" BorderThickness="1" 
-                        CornerRadius="8" Padding="20" Margin="0,0,0,15">
+                <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource CardStyle}" Margin="0,0,0,15">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Network Interfaces" FontSize="16" FontWeight="SemiBold" 
-                                   Foreground="{StaticResource LightTextColor}" Margin="0,0,0,15"/>
+                        <TextBlock Grid.Row="0" Text="Network Interfaces" Style="{StaticResource CardHeaderStyle}"/>
 
                         <ListView Grid.Row="1" x:Name="NetworkListView" Background="Transparent" BorderThickness="0">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Margin" Value="0,0,0,5"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="15,10" Width="940">
+                                    <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="6" Padding="{StaticResource MediumPadding}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>

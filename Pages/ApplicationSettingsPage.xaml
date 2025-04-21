@@ -114,6 +114,7 @@
                             </Grid>
 
                             <!-- Language -->
+                            <!-- Removed Language Section 
                             <Grid Margin="0,0,0,15">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -127,6 +128,8 @@
                                 </StackPanel>
 
                                 <ComboBox x:Name="LanguageComboBox" Grid.Column="1" Width="120"
+                                          IsEnabled="False"
+                                          ToolTip="Language selection is currently disabled." 
                                           Style="{StaticResource DarkComboBoxStyle}">
                                     <ComboBoxItem Content="English" IsSelected="True"/>
                                     <ComboBoxItem Content="Spanish"/>
@@ -135,8 +138,10 @@
                                     <ComboBoxItem Content="Japanese"/>
                                 </ComboBox>
                             </Grid>
+                            -->
 
                             <!-- Theme -->
+                            <!-- Removed Theme Section 
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -156,6 +161,7 @@
                                     <ComboBoxItem Content="System"/>
                                 </ComboBox>
                             </Grid>
+                            -->
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -362,6 +368,7 @@
                             </Grid>
 
                             <!-- Automatic Updates -->
+                            <!-- Removed Automatic Updates Section
                             <Grid Margin="0,0,0,15">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -377,6 +384,7 @@
                                 <CheckBox x:Name="AutoUpdateCheckbox" Grid.Column="1" VerticalAlignment="Center"
                                           IsChecked="True"/>
                             </Grid>
+                            -->
 
                             <!-- Clear Data -->
                             <Grid>
@@ -413,18 +421,14 @@
 
                         <StackPanel Grid.Column="1" Margin="15,0">
                             <TextBlock Text="System Health Monitor" FontSize="16" Foreground="{StaticResource LightTextColor}"/>
-                            <TextBlock Text="Version 2.1.0" Foreground="{StaticResource SubtleTextColor}" Margin="0,5,0,0"/>
-                            <TextBlock x:Name="CopyrightText" Text="© 2025 SysMax Inc. All rights reserved." Foreground="{StaticResource MutedTextColor}" Margin="0,5,0,0"/>
+                            <TextBlock Text="Click 'About' for version information." Foreground="{StaticResource MutedTextColor}" Margin="0,5,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
-                            <Button x:Name="CheckUpdatesButton" Content="Check for Updates" Click="CheckUpdatesButton_Click"
-                                    Background="{StaticResource ButtonBackgroundColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
-                                    Padding="10,5" Margin="0,0,10,0"/>
-
+                            <!-- Removed Check for Updates button -->
+                            
                             <Button x:Name="AboutButton" Content="About" Click="AboutButton_Click"
-                                    Background="{StaticResource ButtonBackgroundColor}" Foreground="{StaticResource LightTextColor}" BorderThickness="0" 
-                                    Padding="10,5"/>
+                                    Style="{StaticResource SmallPrimaryButtonStyle}"/>
                         </StackPanel>
                     </Grid>
                 </Border>

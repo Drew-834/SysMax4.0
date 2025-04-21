@@ -9,6 +9,8 @@
       Title="System Overview">
 
     <Page.Resources>
+        <!-- Remove local styles that are now global -->
+        <!-- 
         <Style x:Key="CardStyle" TargetType="Border">
             <Setter Property="Background" Value="#252525"/>
             <Setter Property="BorderBrush" Value="#333333"/>
@@ -116,6 +118,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+         -->
     </Page.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -130,10 +133,10 @@
 
             <!-- Header -->
             <Grid Grid.Row="0">
-                <TextBlock Text="System Overview" FontSize="24" Foreground="White" FontWeight="SemiBold"/>
+                <TextBlock Text="System Overview" Style="{StaticResource PageHeaderStyle}" Margin="0"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="RefreshButton" Content="Refresh" Style="{StaticResource ActionButtonStyle}" Click="RefreshButton_Click"/>
-                    <Button x:Name="RunScanButton" Content="Run System Scan" Style="{StaticResource ActionButtonStyle}" Margin="10,5,0,5" Click="RunScanButton_Click"/>
+                    <Button x:Name="RefreshButton" Content="Refresh" Style="{StaticResource PrimaryButtonStyle}" Click="RefreshButton_Click" Margin="{StaticResource SmallMargin}"/>
+                    <Button x:Name="RunScanButton" Content="Run System Scan" Style="{StaticResource PrimaryButtonStyle}" Margin="10,5,0,5" Click="RunScanButton_Click"/>
                 </StackPanel>
             </Grid>
 
@@ -165,13 +168,13 @@
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                    <TextBlock Text="CPU" FontWeight="SemiBold" Foreground="#BBBBBB"/>
-                                    <Ellipse x:Name="CpuHealthIndicator" Width="10" Height="10" Fill="#2ecc71" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="CPU" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}"/>
+                                    <Ellipse x:Name="CpuHealthIndicator" Width="10" Height="10" Fill="{StaticResource SecondaryColor}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
 
-                                <TextBlock x:Name="CpuUsageValue" Grid.Row="1" Text="24%" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,5,0,5"/>
+                                <TextBlock x:Name="CpuUsageValue" Grid.Row="1" Text="24%" FontSize="28" FontWeight="Bold" Foreground="{StaticResource LightTextColor}" Margin="0,5,0,5"/>
 
-                                <TextBlock x:Name="CpuTemperature" Grid.Row="2" Text="45°C" Foreground="#AAAAAA" FontSize="12"/>
+                                <TextBlock x:Name="CpuTemperature" Grid.Row="2" Text="45°C" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
                             </Grid>
                         </Border>
 
@@ -185,13 +188,13 @@
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                    <TextBlock Text="Memory" FontWeight="SemiBold" Foreground="#BBBBBB"/>
-                                    <Ellipse x:Name="MemoryHealthIndicator" Width="10" Height="10" Fill="#2ecc71" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Memory" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}"/>
+                                    <Ellipse x:Name="MemoryHealthIndicator" Width="10" Height="10" Fill="{StaticResource SecondaryColor}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
 
-                                <TextBlock x:Name="MemoryUsageValue" Grid.Row="1" Text="36%" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,5,0,5"/>
+                                <TextBlock x:Name="MemoryUsageValue" Grid.Row="1" Text="36%" FontSize="28" FontWeight="Bold" Foreground="{StaticResource LightTextColor}" Margin="0,5,0,5"/>
 
-                                <TextBlock x:Name="MemoryAvailable" Grid.Row="2" Text="10.2 GB Free" Foreground="#AAAAAA" FontSize="12"/>
+                                <TextBlock x:Name="MemoryAvailable" Grid.Row="2" Text="10.2 GB Free" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
                             </Grid>
                         </Border>
 
@@ -205,13 +208,13 @@
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                    <TextBlock Text="Storage" FontWeight="SemiBold" Foreground="#BBBBBB"/>
-                                    <Ellipse x:Name="DiskHealthIndicator" Width="10" Height="10" Fill="#f39c12" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Storage" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}"/>
+                                    <Ellipse x:Name="DiskHealthIndicator" Width="10" Height="10" Fill="{StaticResource WarningColor}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
 
-                                <TextBlock x:Name="DiskUsageValue" Grid.Row="1" Text="78%" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,5,0,5"/>
+                                <TextBlock x:Name="DiskUsageValue" Grid.Row="1" Text="78%" FontSize="28" FontWeight="Bold" Foreground="{StaticResource LightTextColor}" Margin="0,5,0,5"/>
 
-                                <TextBlock x:Name="DiskAvailable" Grid.Row="2" Text="123 GB Free" Foreground="#AAAAAA" FontSize="12"/>
+                                <TextBlock x:Name="DiskAvailable" Grid.Row="2" Text="123 GB Free" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
                             </Grid>
                         </Border>
 
@@ -225,13 +228,13 @@
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                    <TextBlock Text="Network" FontWeight="SemiBold" Foreground="#BBBBBB"/>
-                                    <Ellipse x:Name="NetworkHealthIndicator" Width="10" Height="10" Fill="#2ecc71" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Network" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}"/>
+                                    <Ellipse x:Name="NetworkHealthIndicator" Width="10" Height="10" Fill="{StaticResource SecondaryColor}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
 
-                                <TextBlock x:Name="NetworkSpeedValue" Grid.Row="1" Text="12 MB/s" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,5,0,5"/>
+                                <TextBlock x:Name="NetworkSpeedValue" Grid.Row="1" Text="12 MB/s" FontSize="28" FontWeight="Bold" Foreground="{StaticResource LightTextColor}" Margin="0,5,0,5"/>
 
-                                <TextBlock x:Name="NetworkStatus" Grid.Row="2" Text="Connected" Foreground="#AAAAAA" FontSize="12"/>
+                                <TextBlock x:Name="NetworkStatus" Grid.Row="2" Text="Connected" Foreground="{StaticResource MutedTextColor}" FontSize="12"/>
                             </Grid>
                         </Border>
                     </Grid>
@@ -271,32 +274,32 @@
                             </Grid.RowDefinitions>
 
                             <!-- OS -->
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Operating System:" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,0,10"/>
-                            <TextBlock x:Name="OsInfo" Grid.Row="0" Grid.Column="1" Text="Windows 11 Pro 22H2 (64-bit)" Foreground="White" Margin="15,0,0,10"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Operating System:" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="OsInfo" Grid.Row="0" Grid.Column="1" Text="Windows 11 Pro 22H2 (64-bit)" Foreground="{StaticResource LightTextColor}" Margin="15,0,0,10"/>
 
                             <!-- CPU -->
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Processor:" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,0,10"/>
-                            <TextBlock x:Name="CpuInfo" Grid.Row="1" Grid.Column="1" Text="Intel Core i7-12700K @ 3.60GHz" Foreground="White" Margin="15,0,0,10"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Processor:" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="CpuInfo" Grid.Row="1" Grid.Column="1" Text="Intel Core i7-12700K @ 3.60GHz" Foreground="{StaticResource LightTextColor}" Margin="15,0,0,10"/>
 
                             <!-- RAM -->
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Memory:" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,0,10"/>
-                            <TextBlock x:Name="RamInfo" Grid.Row="2" Grid.Column="1" Text="32 GB DDR5 @ 4800MHz" Foreground="White" Margin="15,0,0,10"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Memory:" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="RamInfo" Grid.Row="2" Grid.Column="1" Text="32 GB DDR5 @ 4800MHz" Foreground="{StaticResource LightTextColor}" Margin="15,0,0,10"/>
 
                             <!-- GPU -->
-                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Graphics:" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,0,10"/>
-                            <TextBlock x:Name="GpuInfo" Grid.Row="3" Grid.Column="1" Text="NVIDIA GeForce RTX 3080" Foreground="White" Margin="15,0,0,10"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Graphics:" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="GpuInfo" Grid.Row="3" Grid.Column="1" Text="NVIDIA GeForce RTX 3080" Foreground="{StaticResource LightTextColor}" Margin="15,0,0,10"/>
 
                             <!-- Storage -->
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Storage:" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,0,10"/>
-                            <TextBlock x:Name="StorageInfo" Grid.Row="4" Grid.Column="1" Text="1TB NVMe SSD, 2TB HDD" Foreground="White" Margin="15,0,0,10"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Storage:" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="StorageInfo" Grid.Row="4" Grid.Column="1" Text="1TB NVMe SSD, 2TB HDD" Foreground="{StaticResource LightTextColor}" Margin="15,0,0,10"/>
 
                             <!-- Network -->
-                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Network:" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,0,10"/>
-                            <TextBlock x:Name="NetworkInfo" Grid.Row="5" Grid.Column="1" Text="Intel Wireless-AC 9560 + Bluetooth 5.0" Foreground="White" Margin="15,0,0,10"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Network:" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="NetworkInfo" Grid.Row="5" Grid.Column="1" Text="Intel Wireless-AC 9560 + Bluetooth 5.0" Foreground="{StaticResource LightTextColor}" Margin="15,0,0,10"/>
 
                             <!-- Computer Name -->
-                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Computer Name:" FontWeight="SemiBold" Foreground="#BBBBBB" Margin="0,0,0,0"/>
-                            <TextBlock x:Name="ComputerNameInfo" Grid.Row="6" Grid.Column="1" Text="DESKTOP-LK728FG" Foreground="White" Margin="15,0,0,0"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Computer Name:" FontWeight="SemiBold" Foreground="{StaticResource SubtleTextColor}" Margin="0,0,0,0"/>
+                            <TextBlock x:Name="ComputerNameInfo" Grid.Row="6" Grid.Column="1" Text="DESKTOP-LK728FG" Foreground="{StaticResource LightTextColor}" Margin="15,0,0,0"/>
                         </Grid>
                     </Grid>
                 </Border>
@@ -312,11 +315,11 @@
                         <TextBlock Grid.Row="0" Text="Quick Actions" Style="{StaticResource CardHeaderStyle}"/>
 
                         <StackPanel Grid.Row="1">
-                            <Button x:Name="CheckUpdatesButton" Content="Check for Windows Updates" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click"/>
-                            <Button x:Name="CleanupButton" Content="Disk Cleanup" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click"/>
-                            <Button x:Name="NetworkDiagnosticsButton" Content="Network Diagnostics" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click"/>
-                            <Button x:Name="StartupAppsButton" Content="Manage Startup Apps" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click"/>
-                            <Button x:Name="SecurityScanButton" Content="Quick Security Scan" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click"/>
+                            <Button x:Name="CheckUpdatesButton" Content="Check for Windows Updates" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click" Margin="0,5,0,5"/>
+                            <Button x:Name="CleanupButton" Content="Disk Cleanup" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click" Margin="0,5,0,5"/>
+                            <Button x:Name="NetworkDiagnosticsButton" Content="Network Diagnostics" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click" Margin="0,5,0,5"/>
+                            <Button x:Name="StartupAppsButton" Content="Manage Startup Apps" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click" Margin="0,5,0,5"/>
+                            <Button x:Name="SecurityScanButton" Content="Quick Security Scan" Style="{StaticResource OutlineButtonStyle}" Click="QuickAction_Click" Margin="0,5,0,5"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -332,12 +335,12 @@
 
                     <Grid Grid.Row="0">
                         <TextBlock Text="Issues &amp; Notifications" Style="{StaticResource CardHeaderStyle}" Margin="0"/>
-                        <TextBlock x:Name="IssueCount" Text="2 issues found" Foreground="#f39c12" HorizontalAlignment="Right"/>
+                        <TextBlock x:Name="IssueCount" Text="2 issues found" Foreground="{StaticResource WarningColor}" HorizontalAlignment="Right"/>
                     </Grid>
 
                     <StackPanel Grid.Row="1" x:Name="IssuesList">
                         <!-- Issue Item 1 -->
-                        <Border Background="#2a2a2a" CornerRadius="4" Padding="12" Margin="0,0,0,10">
+                        <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="4" Padding="12" Margin="0,0,0,10">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -345,20 +348,20 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#f39c12" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <Ellipse Grid.Column="0" Width="12" Height="12" Fill="{StaticResource WarningColor}" Margin="0,0,12,0" VerticalAlignment="Center"/>
 
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Disk space is running low" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Disk space is running low" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="C: drive has less than 15% free space. This may affect system performance." 
-                                              Foreground="#AAAAAA" FontSize="12" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                              Foreground="{StaticResource MutedTextColor}" FontSize="12" TextWrapping="Wrap" Margin="0,5,0,0"/>
                                 </StackPanel>
 
-                                <Button Grid.Column="2" Content="Fix Now" Style="{StaticResource FixButtonStyle}" Tag="DiskSpace" Click="FixIssue_Click"/>
+                                <Button Grid.Column="2" Content="Fix Now" Style="{StaticResource SmallPrimaryButtonStyle}" Tag="DiskSpace" Click="FixIssue_Click"/>
                             </Grid>
                         </Border>
 
                         <!-- Issue Item 2 -->
-                        <Border Background="#2a2a2a" CornerRadius="4" Padding="12" Margin="0,0,0,10">
+                        <Border Background="{StaticResource ItemBackgroundColor}" CornerRadius="4" Padding="12" Margin="0,0,0,10">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -366,21 +369,21 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#e74c3c" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <Ellipse Grid.Column="0" Width="12" Height="12" Fill="{StaticResource DangerColor}" Margin="0,0,12,0" VerticalAlignment="Center"/>
 
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Windows Update needs attention" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Windows Update needs attention" Foreground="{StaticResource LightTextColor}" FontWeight="SemiBold"/>
                                     <TextBlock Text="Important security updates are pending. Restart required to complete installation." 
-                                              Foreground="#AAAAAA" FontSize="12" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                                              Foreground="{StaticResource MutedTextColor}" FontSize="12" TextWrapping="Wrap" Margin="0,5,0,0"/>
                                 </StackPanel>
 
-                                <Button Grid.Column="2" Content="Update Now" Style="{StaticResource FixButtonStyle}" Tag="WindowsUpdate" Click="FixIssue_Click"/>
+                                <Button Grid.Column="2" Content="Update Now" Style="{StaticResource SmallPrimaryButtonStyle}" Tag="WindowsUpdate" Click="FixIssue_Click"/>
                             </Grid>
                         </Border>
 
                         <!-- No Issues Message (hidden by default) -->
                         <TextBlock x:Name="NoIssuesMessage" Text="No issues detected. Your system is running optimally." 
-                                  Foreground="#2ecc71" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,20" Visibility="Collapsed"/>
+                                  Foreground="{StaticResource SecondaryColor}" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,20" Visibility="Collapsed"/>
                     </StackPanel>
                 </Grid>
             </Border>

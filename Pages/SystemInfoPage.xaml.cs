@@ -195,49 +195,16 @@ namespace SysMax2._1.Pages
 
                 CPUValue.Text = $"{systemInfo.GetValueOrDefault("ProcessorName", "Unknown")} ({systemInfo.GetValueOrDefault("CPUCores", "Unknown")} cores)";
 
-                // Try getting detailed RAM info
-                string ramDetails = "Information Unavailable"; // Default value
-                try
-                {
-                    using (var searcher = new ManagementObjectSearcher("SELECT Capacity, Manufacturer, Speed, PartNumber FROM Win32_PhysicalMemory"))
-                    {
-                        long totalMemory = 0;
-                        List<string> ramSticks = new List<string>();
-
-                        foreach (var obj in searcher.Get())
-                        {
-                            long capacity = 0;
-                            if (obj["Capacity"] != null)
-                            {
-                                capacity = Convert.ToInt64(obj["Capacity"]);
-                                totalMemory += capacity;
-                            }
-                            string manufacturer = obj["Manufacturer"]?.ToString() ?? "?";
-                            string speed = obj["Speed"]?.ToString() ?? "?";
-                            string partNumber = obj["PartNumber"]?.ToString() ?? "?";
-                            ramSticks.Add($"{(capacity / (1024.0 * 1024 * 1024)):F1}GB {manufacturer} {speed}MHz ({partNumber})");
-                        }
-
-                        if (totalMemory > 0)
-                        {
-                            // Use the detailed info if available
-                            ramDetails = $"{totalMemory / (1024.0 * 1024 * 1024):F1} GB Total\n ({string.Join("; ", ramSticks)})";
-                        }
-                        else
-                        {
-                            // WMI query succeeded but returned no data, try fallback
-                             _loggingService.Log(LogLevel.Warning, "WMI Win32_PhysicalMemory query returned no RAM data. Using fallback.");
-                             ramDetails = systemInfo.GetValueOrDefault("TotalRAM", "Information Unavailable");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // WMI query failed, use fallback from service
-                    _loggingService.Log(LogLevel.Error, $"Error loading detailed RAM info via WMI: {ex.Message}. Using fallback.");
-                     ramDetails = systemInfo.GetValueOrDefault("TotalRAM", "Information Unavailable");
-                }
-                RAMValue.Text = ramDetails;
+                // Get Total RAM from the monitoring service
+                string totalRamStr = systemInfo.GetValueOrDefault("TotalRAM", "N/A");
+                
+                // Get Available RAM using WMI
+                string availableRamStr = GetAvailableRamWmi();
+                
+                // Format the RAM display text
+                RAMValue.Text = $"Total: {totalRamStr} (Available: {availableRamStr})";
+                
+                // Cleaned up previous attempts
 
                 GPUValue.Text = systemInfo.TryGetValue("GPUName", out string? gpuName)
                     ? gpuName
@@ -255,6 +222,30 @@ namespace SysMax2._1.Pages
                 RAMValue.Text = "Information Unavailable";
                 GPUValue.Text = "Information Unavailable";
                 StorageValue.Text = "Information Unavailable";
+            }
+        }
+
+        private string GetAvailableRamWmi()
+        {
+            try
+            {
+                ObjectQuery wmiQuery = new ObjectQuery("SELECT FreePhysicalMemory FROM Win32_OperatingSystem");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
+                ManagementObjectCollection results = searcher.Get();
+
+                foreach (ManagementObject result in results)
+                {
+                    // FreePhysicalMemory is in KB, convert to GB
+                    ulong freeMemoryKB = (ulong)result["FreePhysicalMemory"];
+                    double freeMemoryGB = freeMemoryKB / (1024.0 * 1024.0);
+                    return $"{freeMemoryGB:F1} GB";
+                }
+                return "WMI Query Failed"; // Should not happen if query succeeds
+            }
+            catch (Exception ex)
+            {
+                _loggingService.Log(LogLevel.Warning, $"Failed to query WMI for Available RAM: {ex.Message}");
+                return "Error";
             }
         }
 
@@ -373,9 +364,21 @@ namespace SysMax2._1.Pages
             }
         }
 
-        private void UpdateTimer_Tick(object? sender, EventArgs e)
+        private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             UpdateUptimeInfo();
+            UpdateAvailableRamWmi();
+        }
+
+        private void UpdateAvailableRamWmi()
+        {
+            // Get Total RAM from the monitoring service (needed for the label)
+            string totalRamStr = _hardwareMonitor.GetSystemInformation().GetValueOrDefault("TotalRAM", "N/A");
+            // Get updated Available RAM using WMI
+            string availableRamStr = GetAvailableRamWmi();
+
+            // Update the UI
+            RAMValue.Text = $"Total: {totalRamStr} (Available: {availableRamStr})";
         }
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)

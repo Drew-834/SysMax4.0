@@ -6,6 +6,7 @@ using SysMax2._1.Models;
 using SysMax2._1.Services;
 using System.IO;
 using System.Text.Json;
+using System.Reflection; // Needed for Assembly
 
 namespace SysMax2._1.Pages
 {
@@ -95,23 +96,40 @@ namespace SysMax2._1.Pages
             }
         }
 
-        private void CheckUpdatesButton_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Update checking functionality is not implemented yet.", "Not Implemented", MessageBoxButton.OK, MessageBoxImage.Information);
-            // Keep assistant message for now
-            if (mainWindow != null)
-            {
-                mainWindow.UpdateStatus("Update check not implemented");
-                mainWindow.ShowAssistantMessage("Checking for updates isn't implemented in this version yet.");
-            }
-        }
-
         private void AboutButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Get version dynamically from assembly info
-            string version = "2.1.0"; // Hardcoded for now
+            // Get version dynamically from assembly info
+            string version = "N/A";
+            try
+            {
+                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+                version = assembly.GetName().Version?.ToString() ?? "N/A";
+                // Remove trailing .0 if present (e.g., 1.0.0.0 -> 1.0.0)
+                if (version.EndsWith(".0")) version = version.Substring(0, version.Length - 2);
+            }
+            catch (Exception ex)
+            {
+                 // _loggingService.Log(LogLevel.Warning, $"Could not retrieve assembly version: {ex.Message}"); // Logging removed as requested
+            }
+            
+            // Get copyright dynamically
+            string copyright = "© 2025 SysMax Inc. All rights reserved."; // Default
+             try
+            {
+                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+                var copyrightAttribute = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>();
+                if (copyrightAttribute != null)
+                {
+                    copyright = copyrightAttribute.Copyright;
+                }
+            }
+            catch (Exception ex)
+            {
+                 // _loggingService.Log(LogLevel.Warning, $"Could not retrieve assembly copyright: {ex.Message}"); // Logging removed as requested
+            }
+
             MessageBox.Show(
-                $"SysMax System Health Monitor\nVersion {version}\n\nA comprehensive system monitoring and optimization tool.\n\n© 2025 SysMax Inc. All rights reserved.",
+                $"SysMax System Health Monitor\nVersion {version}\n\nA comprehensive system monitoring and optimization tool.\n\n{copyright}",
                 "About SysMax",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -128,8 +146,8 @@ namespace SysMax2._1.Pages
                 StartWithWindowsCheckbox.IsChecked = _currentSettings.StartWithWindows;
                 RunInBackgroundCheckbox.IsChecked = _currentSettings.RunInBackground;
                 DefaultUserModeComboBox.SelectedIndex = _currentSettings.GetUserModeIndex();
-                LanguageComboBox.SelectedIndex = 0; // Hardcoded to English for now
-                ThemeComboBox.SelectedIndex = _currentSettings.GetThemeIndex(); // Needs theme switching logic
+                // LanguageComboBox.SelectedIndex = 0; // Removed Language
+                // ThemeComboBox.SelectedIndex = _currentSettings.GetThemeIndex(); // Removed Theme
 
                 // Notifications
                 EnableNotificationsCheckbox.IsChecked = _currentSettings.EnableNotifications;
@@ -148,7 +166,7 @@ namespace SysMax2._1.Pages
 
                 // Advanced
                 EnableLoggingCheckbox.IsChecked = _currentSettings.EnableLogging;
-                AutoUpdateCheckbox.IsChecked = _currentSettings.AutoUpdateCheck; // Placeholder
+                // AutoUpdateCheckbox.IsChecked = _currentSettings.AutoUpdateCheck; // Removed Auto Update
             }
             catch (Exception ex)
             {
@@ -183,13 +201,13 @@ namespace SysMax2._1.Pages
 
                 // Advanced
                 EnableLogging = EnableLoggingCheckbox.IsChecked ?? false,
-                AutoUpdateCheck = AutoUpdateCheckbox.IsChecked ?? false
+                // AutoUpdateCheck = AutoUpdateCheckbox.IsChecked ?? false // Removed Auto Update
             };
             
             // Use helper methods to set string/int values from ComboBox indices
             settingsToSave.SetUserModeFromIndex(DefaultUserModeComboBox.SelectedIndex);
-            // settingsToSave.SetLanguageFromIndex(LanguageComboBox.SelectedIndex); // Need mapping if implemented
-            settingsToSave.SetThemeFromIndex(ThemeComboBox.SelectedIndex);
+            // settingsToSave.SetLanguageFromIndex(LanguageComboBox.SelectedIndex); // Removed Language
+            // settingsToSave.SetThemeFromIndex(ThemeComboBox.SelectedIndex); // Removed Theme
             settingsToSave.SetUpdateFrequencyFromIndex(UpdateFrequencyComboBox.SelectedIndex);
 
 
@@ -207,7 +225,7 @@ namespace SysMax2._1.Pages
                     mainWindow.ShowAssistantMessage("Your application settings have been saved.");
                 }
 
-                // TODO: Apply settings that require immediate action (e.g., theme change, update frequency change)
+                // TODO: Apply settings that require immediate action (e.g., theme change, update frequency change) // Also deferred for simplification
             }
             catch (Exception ex)
             {

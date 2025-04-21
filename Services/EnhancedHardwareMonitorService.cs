@@ -501,15 +501,23 @@ namespace SysMax2._1.Services
                 {
                     foreach (ManagementObject obj in searcher.Get())
                     {
-                        // Temperature is in tenths of degrees Kelvin
-                        double temp = Convert.ToDouble(obj["CurrentTemperature"]);
-
-                        // Convert from tenths of Kelvin to Celsius
-                        return (float)((temp / 10) - 273.15);
+                        var tempObj = obj["CurrentTemperature"];
+                        if (tempObj != null && uint.TryParse(tempObj.ToString(), out uint tempKelvinTenths))
+                        {
+                            // Temperature is in tenths of degrees Kelvin
+                            // Convert from tenths of Kelvin to Celsius
+                            return (float)((tempKelvinTenths / 10.0) - 273.15);
+                        }
+                        else
+                        {
+                            _loggingService.Log(LogLevel.Warning, "Could not parse CurrentTemperature from MSAcpi_ThermalZoneTemperature.");
+                            // Continue to next object or fallback if this was the only one
+                        }
                     }
                 }
 
-                // If WMI method fails, try hardware monitor fallback
+                // If WMI MSAcpi_ThermalZoneTemperature fails or returns no valid data, try Win32_TemperatureProbe
+                _loggingService.Log(LogLevel.Info, "MSAcpi_ThermalZoneTemperature failed, trying Win32_TemperatureProbe for CPU Temp.");
                 using (var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_TemperatureProbe"))
                 {
                     foreach (var obj in searcher.Get())
@@ -833,6 +841,7 @@ namespace SysMax2._1.Services
 
                 // RAM information
                 sysInfo["TotalRAM"] = $"{TotalMemory / (1024.0 * 1024 * 1024):F1} GB";
+                sysInfo["AvailableRAM"] = $"{AvailableMemory / (1024.0 * 1024 * 1024):F1} GB";
 
                 // Get additional info from LibreHardwareMonitor
                 var gpuInfo = _baseMonitor.GetGpuInfo();
