@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.IO;
 using SysMax2._1.Models;
 using SysMax2._1.Services;
 
@@ -15,6 +16,7 @@ namespace SysMax2._1.Pages
     {
         private readonly LoggingService _loggingService = LoggingService.Instance;
         private MainWindow? mainWindow;
+        private string videosFolderPath;
 
         public HelpSupportPage()
         {
@@ -23,6 +25,9 @@ namespace SysMax2._1.Pages
             // Find main window
             mainWindow = Window.GetWindow(this) as MainWindow;
 
+            // Set videos folder path
+            videosFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Videos");
+            
             // Log page navigation
             _loggingService.Log(LogLevel.Info, "Navigated to Help & Support page");
 
@@ -62,70 +67,75 @@ namespace SysMax2._1.Pages
             }
         }
 
-        private void VideoThumbnail_Click(object sender, MouseButtonEventArgs e)
+        private void IntroVideoArea_MouseDown(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                // In a real application, this would play a video tutorial
-                // For now, we'll simulate with a message
-
+                string introVideoPath = Path.Combine(videosFolderPath, "copy_DD25E089-4F02-414F-A4B6-1E1DA114E003 (1).mov");
+                
+                if (!File.Exists(introVideoPath))
+                {
+                    throw new FileNotFoundException($"Video file not found at path: {introVideoPath}");
+                }
+                
+                // Log the action
+                _loggingService.Log(LogLevel.Info, "User clicked Intro Video tutorial");
+                
+                // Show message before playing
                 if (mainWindow != null)
                 {
-                    mainWindow.ShowAssistantMessage("In the full version, this would play a video tutorial to help you learn how to use SysMax effectively.");
+                    mainWindow.ShowAssistantMessage("Opening the Intro Video in your system's default media player...");
                 }
-
-                // Get the title of the video
-                if (sender is FrameworkElement element)
+                
+                // Open video in the default system player
+                var processInfo = new ProcessStartInfo
                 {
-                    // Find the parent Border
-                    if (element.Parent is FrameworkElement parent)
-                    {
-                        // Find the Grid
-                        if (parent.Parent is Grid grid)
-                        {
-                            // Find the StackPanel
-                            StackPanel? stackPanel = null;
-                            foreach (var child in grid.Children)
-                            {
-                                if (child is StackPanel && Grid.GetRow((FrameworkElement)child) == 1)
-                                {
-                                    stackPanel = child as StackPanel;
-                                    break;
-                                }
-                            }
-
-                            if (stackPanel != null && stackPanel.Children.Count > 0 && stackPanel.Children[0] is TextBlock titleBlock)
-                            {
-                                string videoTitle = titleBlock.Text;
-
-                                // Log the action
-                                _loggingService.Log(LogLevel.Info, $"User clicked video tutorial: {videoTitle}");
-
-                                // Show a simple message dialog
-                                MessageBox.Show(
-                                    $"You clicked on the '{videoTitle}' tutorial.\n\nIn the full version of SysMax, this would play a video tutorial to help you learn how to use this feature.",
-                                    "Video Tutorial",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Information);
-
-                                return;
-                            }
-                        }
-                    }
-                }
-
-                // Fallback if we can't determine the video title
-                _loggingService.Log(LogLevel.Info, "User clicked video tutorial");
-
-                MessageBox.Show(
-                    "In the full version of SysMax, this would play a video tutorial to help you learn how to use SysMax effectively.",
-                    "Video Tutorial",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                    FileName = introVideoPath,
+                    UseShellExecute = true
+                };
+                
+                Process.Start(processInfo);
             }
             catch (Exception ex)
             {
-                _loggingService.Log(LogLevel.Error, $"Error showing video dialog: {ex.Message}");
+                _loggingService.Log(LogLevel.Error, $"Error playing Intro video: {ex.Message}");
+                MessageBox.Show($"Could not play video: {ex.Message}", "Video Playback Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void ITSolutionVideoArea_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                string itSolutionVideoPath = Path.Combine(videosFolderPath, "IT Solution.mov");
+                
+                if (!File.Exists(itSolutionVideoPath))
+                {
+                    throw new FileNotFoundException($"Video file not found at path: {itSolutionVideoPath}");
+                }
+                
+                // Log the action
+                _loggingService.Log(LogLevel.Info, "User clicked IT Solution Video tutorial");
+                
+                // Show message before playing
+                if (mainWindow != null)
+                {
+                    mainWindow.ShowAssistantMessage("Opening the IT Solution Video in your system's default media player...");
+                }
+                
+                // Open video in the default system player
+                var processInfo = new ProcessStartInfo
+                {
+                    FileName = itSolutionVideoPath,
+                    UseShellExecute = true
+                };
+                
+                Process.Start(processInfo);
+            }
+            catch (Exception ex)
+            {
+                _loggingService.Log(LogLevel.Error, $"Error playing IT Solution video: {ex.Message}");
+                MessageBox.Show($"Could not play video: {ex.Message}", "Video Playback Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

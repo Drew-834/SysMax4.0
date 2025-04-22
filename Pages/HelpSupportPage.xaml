@@ -167,89 +167,60 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Tutorial 1 -->
+                            <!-- Tutorial 1: Intro Video -->
                             <Border Grid.Column="0" Background="{StaticResource ItemBackgroundColor}" Margin="0,0,10,0" CornerRadius="6">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="140"/>
+                                        <RowDefinition Height="180"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <Border Grid.Row="0" Background="#1e1e1e" Cursor="Hand" MouseDown="VideoThumbnail_Click">
+                                    <!-- Clickable Video Area (When clicked, opens dialog) -->
+                                    <Border x:Name="IntroVideoArea" Grid.Row="0" Background="#1e1e1e" Cursor="Hand" MouseDown="IntroVideoArea_MouseDown">
                                         <Grid>
-                                            <TextBlock Text="VIDEO THUMBNAIL" Foreground="#444444" 
+                                            <TextBlock Text="INTRO VIDEO" Foreground="#444444"
                                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             <Border Width="50" Height="50" CornerRadius="25" Background="#3498db" Opacity="0.8">
-                                                <TextBlock Text="▶" FontSize="20" Foreground="White" 
-                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Text="▶" FontSize="20" Foreground="White"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                                             </Border>
                                         </Grid>
                                     </Border>
 
                                     <StackPanel Grid.Row="1" Margin="15,10">
-                                        <TextBlock Text="Getting Started with SysMax" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
-                                        <TextBlock Text="Learn the basics of SysMax and how to navigate the interface" 
+                                        <TextBlock Text="Intro to SysMax" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
+                                        <TextBlock Text="A quick overview of SysMax and its main features."
                                                    Foreground="{StaticResource MutedTextColor}" TextWrapping="Wrap" Margin="0,5,0,0"/>
-                                        <TextBlock Text="3:45" Foreground="#888888" Margin="0,5,0,0"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
 
-                            <!-- Tutorial 2 -->
-                            <Border Grid.Column="1" Background="{StaticResource ItemBackgroundColor}" Margin="5,0" CornerRadius="6">
+                            <!-- Tutorial 2: IT Solution Video -->
+                            <Border Grid.Column="1" Background="{StaticResource ItemBackgroundColor}" Margin="10,0,0,0" CornerRadius="6">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="140"/>
+                                        <RowDefinition Height="180"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <Border Grid.Row="0" Background="#1e1e1e" Cursor="Hand" MouseDown="VideoThumbnail_Click">
+                                    <!-- Clickable Video Area (When clicked, opens dialog) -->
+                                    <Border x:Name="ITSolutionVideoArea" Grid.Row="0" Background="#1e1e1e" Cursor="Hand" MouseDown="ITSolutionVideoArea_MouseDown">
                                         <Grid>
-                                            <TextBlock Text="VIDEO THUMBNAIL" Foreground="#444444" 
+                                            <TextBlock Text="IT SOLUTION" Foreground="#444444"
                                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             <Border Width="50" Height="50" CornerRadius="25" Background="#3498db" Opacity="0.8">
-                                                <TextBlock Text="▶" FontSize="20" Foreground="White" 
-                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock Text="▶" FontSize="20" Foreground="White"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3,0,0,0"/>
                                             </Border>
                                         </Grid>
                                     </Border>
 
                                     <StackPanel Grid.Row="1" Margin="15,10">
-                                        <TextBlock Text="Resolving Common Issues" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
-                                        <TextBlock Text="Learn how SysMax helps identify and fix problems, like freeing up disk space when your drive is full." 
+                                        <TextBlock Text="SysMax IT Solution Example" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
+                                        <TextBlock Text="See how SysMax identifies and helps resolve a common system issue."
                                                    Foreground="{StaticResource MutedTextColor}" TextWrapping="Wrap" Margin="0,5,0,0"/>
-                                        <TextBlock Text="5:12" Foreground="#888888" Margin="0,5,0,0"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-
-                            <!-- Tutorial 3 -->
-                            <Border Grid.Column="2" Background="{StaticResource ItemBackgroundColor}" Margin="10,0,0,0" CornerRadius="6">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="140"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <Border Grid.Row="0" Background="#1e1e1e" Cursor="Hand" MouseDown="VideoThumbnail_Click">
-                                        <Grid>
-                                            <TextBlock Text="VIDEO THUMBNAIL" Foreground="#444444" 
-                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            <Border Width="50" Height="50" CornerRadius="25" Background="#3498db" Opacity="0.8">
-                                                <TextBlock Text="▶" FontSize="20" Foreground="White" 
-                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </Grid>
-                                    </Border>
-
-                                    <StackPanel Grid.Row="1" Margin="15,10">
-                                        <TextBlock Text="Advanced Features (Pro Mode)" FontWeight="SemiBold" Foreground="{StaticResource LightTextColor}"/>
-                                        <TextBlock Text="Explore the advanced features available in Pro mode" 
-                                                   Foreground="{StaticResource MutedTextColor}" TextWrapping="Wrap" Margin="0,5,0,0"/>
-                                        <TextBlock Text="7:38" Foreground="#888888" Margin="0,5,0,0"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
